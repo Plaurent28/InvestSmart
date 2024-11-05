@@ -1,0 +1,10 @@
+{
+    "aws:autoscaling:launchconfiguration": {
+        "InstanceType": "t2.micro",
+        "IamInstanceProfile": "aws-elasticbeanstalk-ec2-role"
+    },
+    "aws:autoscaling:asg": {
+        "MinSize": "1",
+        "MaxSize": "1"
+    }
+}
