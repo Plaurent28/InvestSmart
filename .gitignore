@@ -1,27 +1,109 @@
 # Dependencies
 /node_modules
+/frontend/node_modules
+/backend/node_modules
 /.pnp
 .pnp.js
+yarn.lock
+package-lock.json
 
 # Testing
 /coverage
+*.test.js.snap
 
-# Production
+# Production & Build
 /build
+/dist
+/frontend/build
+/backend/build
+*.bundle.js
 
-# Misc
-.DS_Store
+# Environment Variables & Secrets
 .env
+.env*
 .env.local
+.env.development
 .env.development.local
 .env.test.local
+.env.production
 .env.production.local
+*.pem
+*.key
+*.cert
 
+# IDE & Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+.DS_Store
+.env
+Thumbs.db
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+logs
+*.log
 
 # Elastic Beanstalk
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+.tmp
+
+# Compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Archives & Compressions
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.tgz
+
+# MongoDB
+/data/db
+*.mongodb
+
+# Stripe specific
+stripe.exe
+.stripe/
+
+# Backend specific
+/backend/uploads
+/backend/logs
+/backend/.cache
+
+# Frontend specific
+/frontend/.cache
+/frontend/public/uploads
+.next/
+out/
+.nuxt/
+
+# Documentation
+/docs/_site/
+/docs/.jekyll-cache/
+/docs/.jekyll-metadata
+
+# Misc
+.DS_Store
+*.pem
+.history/
