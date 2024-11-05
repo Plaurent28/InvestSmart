@@ -35,7 +35,7 @@ router.post('/register',
       const existingUser = await User.findOne({ email });
       
       if (existingUser) {
-        return res.status(400).json({ error: 'Email déjà utilisé' });
+        return res.status(400).json(JSON.stringify({ error: 'Email déjà utilisé' }));
       }
       
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -44,9 +44,9 @@ router.post('/register',
         password: hashedPassword
       });
       
-      res.status(201).json({ message: 'Inscription réussie' });
+      res.status(201).json(JSON.stringify({ message: 'Inscription réussie' }));
     } catch (error) {
-      res.status(500).json({ error: 'Erreur lors de l\'inscription' });
+      res.status(500).json(JSON.stringify({ error: 'Erreur lors de l\'inscription' }));
     }
 });
 
@@ -69,11 +69,11 @@ router.post('/login',
       const user = await User.findOne({ email });
       
       if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(401).json({ error: 'Identifiants invalides' });
+        return res.status(401).json(JSON.stringify({ error: 'Identifiants invalides' }));
       }
       
       if (user.is2FAEnabled && !req.body.totpToken) {
-        return res.status(403).json({ message: 'Code 2FA requis' });
+        return res.status(403).json(JSON.stringify({ message: 'Code 2FA requis' }));
       }
       
       const token = jwt.sign(
@@ -82,9 +82,9 @@ router.post('/login',
         { expiresIn: '24h' }
       );
       
-      res.json({ token });
+      res.json(JSON.stringify({ token }));
     } catch (error) {
-      res.status(500).json({ error: 'Erreur de connexion' });
+      res.status(500).json(JSON.stringify({ error: 'Erreur de connexion' }));
     }
 });
 

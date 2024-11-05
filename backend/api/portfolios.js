@@ -24,9 +24,9 @@ router.get('/summary', async (req, res) => {
       risk: portfolio.calculateRiskMetrics()
     };
     
-    res.json(summary);
+    res.json(JSON.stringify(summary));
   } catch (error) {
-    res.status(500).json({ error: 'Erreur lors de la récupération du résumé' });
+    res.status(500).json(JSON.stringify({ error: 'Erreur lors de la récupération du résumé' }));
   }
 });
 
@@ -50,9 +50,9 @@ router.get('/assets/:type', async (req, res) => {
       performance: calculateTypePerformance(assets)
     };
     
-    res.json(details);
+    res.json(JSON.stringify(details));
   } catch (error) {
-    res.status(500).json({ error: 'Erreur lors de la récupération des actifs' });
+    res.status(500).json(JSON.stringify({ error: 'Erreur lors de la récupération des actifs' }));
   }
 });
 
@@ -61,9 +61,9 @@ router.post('/rebalance', async (req, res) => {
   try {
     const portfolio = await Portfolio.findOne({ userId: req.user._id });
     const rebalancingPlan = await portfolio.generateRebalancingPlan();
-    res.json(rebalancingPlan);
+    res.json(JSON.stringify(rebalancingPlan));
   } catch (error) {
-    res.status(500).json({ error: 'Erreur lors du rééquilibrage' });
+    res.status(500).json(JSON.stringify({ error: 'Erreur lors du rééquilibrage' }));
   }
 });
 

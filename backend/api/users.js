@@ -24,19 +24,19 @@ router.get('/me', authMiddleware, async (req, res) => {
       .populate('preferences');
 
     if (!user) {
-      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+      return res.status(404).json(JSON.stringify({ error: 'Utilisateur non trouvé' }));
     }
 
     // Ajout des informations de portfolio si nécessaire
     const userWithPortfolio = await enrichUserWithPortfolioData(user);
     
-    res.json({
+    res.json(JSON.stringify({
       status: 'success',
       data: userWithPortfolio
-    });
+    }));
   } catch (error) {
     console.error('Error fetching user profile:', error);
-    res.status(500).json({ error: 'Erreur lors de la récupération du profil' });
+    res.status(500).json(JSON.stringify({ error: 'Erreur lors de la récupération du profil' }));
   }
 });
 
@@ -73,7 +73,7 @@ router.put('/me',
           _id: { $ne: req.user._id } 
         });
         if (existingUser) {
-          return res.status(400).json({ error: 'Cet email est déjà utilisé' });
+          return res.status(400).json(JSON.stringify({ error: 'Cet email est déjà utilisé' }));
         }
       }
 
@@ -83,14 +83,14 @@ router.put('/me',
         { new: true, runValidators: true }
       ).select('-password -refreshToken');
 
-      res.json({
+      res.json(JSON.stringify({
         status: 'success',
         message: 'Profil utilisateur mis à jour',
         data: user
-      });
+      }));
     } catch (error) {
       console.error('Error updating user profile:', error);
-      res.status(500).json({ error: 'Erreur lors de la mise à jour du profil' });
+      res.status(500).json(JSON.stringify({ error: 'Erreur lors de la mise à jour du profil' }));
     }
 });
 
@@ -124,20 +124,20 @@ router.get('/preferences', authMiddleware, async (req, res) => {
         }
       });
       
-      return res.json({
+      return res.json(JSON.stringify({
         status: 'success',
         message: 'Préférences par défaut créées',
         data: defaultPreferences
-      });
+      }));
     }
 
-    res.json({
+    res.json(JSON.stringify({
       status: 'success',
       data: preferences
-    });
+    }));
   } catch (error) {
     console.error('Error fetching user preferences:', error);
-    res.status(500).json({ error: 'Erreur lors de la récupération des préférences' });
+    res.status(500).json(JSON.stringify({ error: 'Erreur lors de la récupération des préférences' }));
   }
 });
 
@@ -175,14 +175,14 @@ router.put('/preferences',
         await recalculateInvestmentRecommendations(req.user._id);
       }
 
-      res.json({
+      res.json(JSON.stringify({
         status: 'success',
         message: 'Préférences mises à jour',
         data: preferences
-      });
+      }));
     } catch (error) {
       console.error('Error updating user preferences:', error);
-      res.status(500).json({ error: 'Erreur lors de la mise à jour des préférences' });
+      res.status(500).json(JSON.stringify({ error: 'Erreur lors de la mise à jour des préférences' }));
     }
 });
 

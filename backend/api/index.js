@@ -31,10 +31,10 @@ router.use('/webhooks/stripe', webhookRoutes);
 // Middleware d'erreur global
 router.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
+  res.status(500).json(JSON.stringify({
     error: 'Une erreur est survenue',
     message: process.env.NODE_ENV === 'development' ? err.message : undefined
-  });
+  }));
 });
 
 module.exports = router;

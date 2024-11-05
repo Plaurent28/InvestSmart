@@ -11,9 +11,9 @@ router.post('/create-payment-intent', async (req, res) => {
             currency,
             payment_method_types: ['card']
         });
-        res.json({ clientSecret: paymentIntent.client_secret });
+        res.json(JSON.stringify({ clientSecret: paymentIntent.client_secret }));
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json(JSON.stringify({ error: error.message }));
     }
 });
 

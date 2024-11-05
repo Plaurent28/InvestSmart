@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const stripe = require('stripe')(process.env.sk_test_51QHPRBKnNbCUmSR7E4lxWycUsrnZXLed526rt00tNkknuLmvm9CotBLd4Fz9ebmSk7HzfzD1uKYmcW9irRdD2wp500EyAd7pL2);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 router.post('/webhooks/stripe', express.raw({ type: 'application/json' }), (req, res) => {
@@ -9,7 +9,7 @@ router.post('/webhooks/stripe', express.raw({ type: 'application/json' }), (req,
     try {
         event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
     } catch (err) {
-        return res.status(400).send(`Webhook error: ${err.message}`);
+        return res.status(400).json(JSON.stringify({ error: `Webhook error: ${err.message}` }));
     }
 
     // Gérer les différents événements Stripe ici
@@ -19,6 +19,7 @@ router.post('/webhooks/stripe', express.raw({ type: 'application/json' }), (req,
     }
     // Autres événements à gérer...
     
-    res.json({ received: true });
+    res.json(JSON.stringify({ received: true }));
 });
+
 module.exports = router;

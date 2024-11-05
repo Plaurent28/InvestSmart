@@ -23,9 +23,9 @@ router.post('/connect', async (req, res) => {
       accountId
     });
     
-    res.json({ message: 'Compte connecté avec succès' });
+    res.json(JSON.stringify({ message: 'Compte connecté avec succès' }));
   } catch (error) {
-    res.status(500).json({ error: 'Erreur de connexion bancaire' });
+    res.status(500).json(JSON.stringify({ error: 'Erreur de connexion bancaire' }));
   }
 });
 
@@ -45,9 +45,9 @@ router.get('/accounts', async (req, res) => {
       accounts.push(...accountInfo.accounts);
     }
     
-    res.json(accounts);
+    res.json(JSON.stringify(accounts));
   } catch (error) {
-    res.status(500).json({ error: 'Erreur de récupération des comptes' });
+    res.status(500).json(JSON.stringify({ error: 'Erreur de récupération des comptes' }));
   }
 });
 
@@ -56,9 +56,9 @@ router.post('/verify-account', async (req, res) => {
   try {
     const { accountId } = req.body;
     const verification = await plaidClient.verifyAccount(accountId);
-    res.json(verification);
+    res.json(JSON.stringify(verification));
   } catch (error) {
-    res.status(500).json({ error: 'Erreur de vérification' });
+    res.status(500).json(JSON.stringify({ error: 'Erreur de vérification' }));
   }
 });
 

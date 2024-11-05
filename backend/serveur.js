@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose'); // Assurez-vous que mongoose est importé ici
 const connectDB = require('./config/db');

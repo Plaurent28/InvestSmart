@@ -29,9 +29,9 @@ router.post('/',
       // Mettre à jour le portfolio
       await Portfolio.updateInvestments(req.user._id);
       
-      res.status(201).json(investment);
+      res.status(201).json(JSON.stringify(investment));
     } catch (error) {
-      res.status(500).json({ error: 'Erreur lors de la création' });
+      res.status(500).json(JSON.stringify({ error: 'Erreur lors de la création' }));
     }
 });
 
