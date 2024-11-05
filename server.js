@@ -2,16 +2,24 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// Serve static files from the React app
+// Middleware pour servir les fichiers statiques du build React
 app.use(express.static(path.join(__dirname, 'build')));
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
+// Middleware pour parser le JSON
+app.use(express.json());
+
+// Route de base pour l'API
+app.get('/api/status', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Route catch-all pour servir l'application React
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// Port d'écoute
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
