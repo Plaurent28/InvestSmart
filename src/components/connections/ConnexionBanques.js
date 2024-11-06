@@ -37,10 +37,12 @@ const ConnexionBanques = () => {
     { id: 12, name: 'Bourse Direct' },
     { id: 13, name: 'Saxo Banque' },
     { id: 14, name: 'Trade Republic' },
-    { id: 15, name: 'Linxea' },
+    { id: 15, name: 'Linxea' }
   ];
 
-  const [connectedBanks, setConnectedBanks] = useState([]); // Définir les banques connectées comme une liste vide par défaut
+  const filteredBanks = bankOptions.filter(bank =>
+    bank.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,50 +56,61 @@ const ConnexionBanques = () => {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#869D78' }}>
+    <div className="min-h-screen relative" style={{ backgroundColor: '#869D78' }}>
       <div className="max-w-7xl mx-auto p-6 space-y-6">
-        
-        {/* Ajouter une banque */}
-        <Card className="bg-white/90 backdrop-blur-sm border-0 z-50"> {/* z-50 pour la priorité */}
+        {/* En-tête */}
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold text-white flex items-center gap-2">
+              <Building size={32} />
+              Connexions Bancaires
+            </h1>
+            <p className="mt-2 text-white/80">
+              Synchronisez vos comptes bancaires pour un suivi automatisé
+            </p>
+          </div>
+        </div>
+
+        {/* Connecter une nouvelle banque */}
+        <Card className="bg-white/90 backdrop-blur-sm border-0 z-10 relative">
           <CardHeader>
             <CardTitle>Connecter une nouvelle banque</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="relative" ref={dropdownRef}>
+              {/* Champ de recherche */}
               <input
                 type="text"
                 placeholder="Rechercher votre banque..."
                 className="w-full p-4 pr-12 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#869D78] focus:border-transparent"
                 onClick={() => setShowDropdown(true)}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setShowDropdown(true);
-                }}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 value={searchTerm}
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                 <Building className="text-gray-400" size={20} />
               </div>
-              
-              {showDropdown && (
+
+              {/* Menu déroulant */}
+              {showDropdown && searchTerm && (
                 <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-lg border border-gray-100 max-h-96 overflow-auto">
-                  {bankOptions
-                    .filter(bank => bank.name.toLowerCase().includes(searchTerm.toLowerCase()))
-                    .map((bank) => (
+                  {filteredBanks.length > 0 ? (
+                    filteredBanks.map((bank) => (
                       <button
                         key={bank.id}
                         className="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center justify-between"
                         onClick={() => {
                           setSearchTerm(bank.name);
                           setShowDropdown(false);
-                          // Ajouter la logique pour connecter la banque
                         }}
                       >
                         <span className="font-medium">{bank.name}</span>
                         <ChevronRight size={16} className="text-gray-400" />
                       </button>
                     ))
-                  }
+                  ) : (
+                    <p className="px-4 py-3 text-gray-500">Aucun résultat</p>
+                  )}
                 </div>
               )}
             </div>
@@ -107,7 +120,7 @@ const ConnexionBanques = () => {
         {/* Message de sécurité */}
         <Card className="bg-white/90 backdrop-blur-sm border-0">
           <CardContent className="p-4 text-center">
-            <div className="flex items-start justify-center gap-4 text-gray-600">
+            <div className="flex items-center justify-center gap-4 text-gray-600">
               <Shield className="flex-shrink-0" size={24} />
               <div>
                 <p className="font-medium">Vos données sont sécurisées</p>
@@ -119,71 +132,6 @@ const ConnexionBanques = () => {
             </div>
           </CardContent>
         </Card>
-
-        {/* Afficher les banques connectées uniquement si elles existent */}
-        {connectedBanks.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {connectedBanks.map(bank => (
-              <Card key={bank.id} className="bg-white/90 backdrop-blur-sm border-0">
-                <CardHeader>
-                  <div className="flex justify-between items-center">
-                    <CardTitle className="flex items-center gap-2">
-                      <Building size={24} />
-                      {bank.name}
-                    </CardTitle>
-                    <div className="flex items-center gap-2">
-                      {bank.status === 'active' ? (
-                        <span className="flex items-center gap-1 text-sm text-green-600">
-                          <CheckCircle2 size={16} />
-                          Connecté
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1 text-sm text-yellow-600">
-                          <AlertTriangle size={16} />
-                          Actualisation requise
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      {bank.accounts.map((account, index) => (
-                        <div 
-                          key={index}
-                          className="flex justify-between items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-                        >
-                          <span className="font-medium">{account.type}</span>
-                          <span className="text-gray-700">
-                            {account.balance.toLocaleString('fr-FR')} €
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex items-center justify-between text-sm text-gray-500 pt-2">
-                      <div className="flex items-center gap-1">
-                        <Clock size={16} />
-                        Dernière synchro : {new Date(bank.lastSync).toLocaleString('fr-FR')}
-                      </div>
-                      <div className="flex gap-2">
-                        <button className="p-2 hover:bg-gray-100 rounded-lg">
-                          <RefreshCcw size={16} />
-                        </button>
-                        <button className="p-2 hover:bg-gray-100 rounded-lg">
-                          <Settings size={16} />
-                        </button>
-                        <button className="p-2 hover:bg-gray-100 rounded-lg text-red-500">
-                          <X size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
 
         {/* Informations complémentaires */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
