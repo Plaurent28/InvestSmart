@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import {
   FileText,
@@ -16,58 +16,48 @@ import {
 
 const GenerateurRapportsFiscaux = () => {
   const [selectedYear, setSelectedYear] = useState('2023');
-  const [reports] = useState({
+  
+  // Initialisation des valeurs à zéro
+  const [reports, setReports] = useState({
     summary: {
-      totalGains: 12500,
-      totalLosses: -3200,
-      netTaxableGains: 9300,
-      estimatedTax: 2790,
-      carryForwardLosses: 1200
+      totalGains: 0,
+      totalLosses: 0,
+      netTaxableGains: 0,
+      estimatedTax: 0,
+      carryForwardLosses: 0
     },
-    transactions: [
-      {
-        id: 1,
-        type: 'PEA',
-        asset: 'Actions Apple',
-        buyDate: '2022-03-15',
-        sellDate: '2023-11-20',
-        buyPrice: 8500,
-        sellPrice: 12000,
-        gain: 3500,
-        taxStatus: 'Exonéré (PEA > 5 ans)'
-      },
-      {
-        id: 2,
-        type: 'Compte-Titres',
-        asset: 'ETF World',
-        buyDate: '2023-01-10',
-        sellDate: '2023-12-15',
-        buyPrice: 15000,
-        sellPrice: 18000,
-        gain: 3000,
-        taxStatus: 'Imposable'
-      }
-    ]
+    transactions: []
   });
 
-  const [documents] = useState([
-    {
-      id: 1,
-      name: 'IFU 2023 - Compte-Titres',
-      type: 'IFU',
-      date: '2024-02-15',
-      status: 'Disponible',
-      source: 'Broker A'
-    },
-    {
-      id: 2,
-      name: 'Relevé Annuel PEA 2023',
-      type: 'Relevé',
-      date: '2024-01-30',
-      status: 'Disponible',
-      source: 'Broker B'
-    }
-  ]);
+  const [documents, setDocuments] = useState([]);
+
+  // Simule la récupération des données utilisateur après la connexion de la banque
+  useEffect(() => {
+    const fetchReportData = async () => {
+      try {
+        // Remplacez cette ligne par l'URL de votre API
+        const response = await fetch('/api/user/reports');
+        const data = await response.json();
+
+        setReports({
+          summary: {
+            totalGains: data.summary.totalGains || 0,
+            totalLosses: data.summary.totalLosses || 0,
+            netTaxableGains: data.summary.netTaxableGains || 0,
+            estimatedTax: data.summary.estimatedTax || 0,
+            carryForwardLosses: data.summary.carryForwardLosses || 0
+          },
+          transactions: data.transactions || []
+        });
+        
+        setDocuments(data.documents || []);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données du rapport:", error);
+      }
+    };
+
+    fetchReportData();
+  }, [selectedYear]);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#869D78' }}>
@@ -218,26 +208,6 @@ const GenerateurRapportsFiscaux = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Fonctionnalités Premium */}
-        <Card className="bg-[#9b59b6] text-white">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Crown size={24} />
-                <div>
-                  <h3 className="font-medium text-lg">Passez à la version Premium</h3>
-                  <p className="text-white/80">
-                    Accédez à l'export détaillé, la simulation fiscale, et plus encore
-                  </p>
-                </div>
-              </div>
-              <button className="px-6 py-2 bg-white text-[#9b59b6] rounded-lg hover:bg-white/90">
-                Découvrir
-              </button>
             </div>
           </CardContent>
         </Card>
