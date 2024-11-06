@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
@@ -19,17 +19,36 @@ const DashboardPrincipal = () => {
     navigate('/connections/banks');
   };
 
-  const [portfolioData] = useState({
-    totalValue: 170000,
+  // Initialisation des valeurs à zéro
+  const [portfolioData, setPortfolioData] = useState({
+    totalValue: 0,
+    performance: 0,
     distribution: [
-      { type: 'PEA', value: 50000, color: '#3498db' },
-      { type: 'Compte-Titres', value: 30000, color: '#2ecc71' },
-      { type: 'Crypto', value: 20000, color: '#f1c40f' },
-      { type: 'Immobilier', value: 40000, color: '#e74c3c' },
-      { type: 'SCPI', value: 10000, color: '#9b59b6' },
-      { type: 'Épargne', value: 20000, color: '#34495e' }
+      { type: 'PEA', value: 0, color: '#3498db' },
+      { type: 'Compte-Titres', value: 0, color: '#2ecc71' },
+      { type: 'Crypto', value: 0, color: '#f1c40f' },
+      { type: 'Immobilier', value: 0, color: '#e74c3c' },
+      { type: 'SCPI', value: 0, color: '#9b59b6' },
+      { type: 'Épargne', value: 0, color: '#34495e' }
     ]
   });
+
+  // Simule la récupération des données utilisateur après la connexion de la banque
+  useEffect(() => {
+    // Exemple de fonction pour récupérer les données depuis votre backend/API
+    const fetchPortfolioData = async () => {
+      try {
+        // Simulez une requête API ou utilisez une fonction réelle pour obtenir les données
+        const response = await fetch('/api/user/portfolio'); // Remplacez cette ligne par l'URL de votre API
+        const data = await response.json();
+        setPortfolioData(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données du portfolio:", error);
+      }
+    };
+
+    fetchPortfolioData();
+  }, []);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#869D78' }}>
@@ -71,7 +90,9 @@ const DashboardPrincipal = () => {
                 <TrendingUp className="text-green-500" size={24} />
                 <div>
                   <p className="text-sm text-gray-600">Performance Globale</p>
-                  <p className="text-2xl font-bold text-green-500">+12.5%</p>
+                  <p className="text-2xl font-bold text-green-500">
+                    {portfolioData.performance.toFixed(1)}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -96,7 +117,7 @@ const DashboardPrincipal = () => {
                       cx="50%"
                       cy="50%"
                       outerRadius={80}
-                      label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     >
                       {portfolioData.distribution.map((entry, index) => (
                         <Cell key={index} fill={entry.color} />

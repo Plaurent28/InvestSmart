@@ -1,25 +1,33 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Ajout de l'import
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-// ... autres imports restent identiques
+import { useNavigate } from 'react-router-dom';
+import { 
+  Menu,
+  Plus,
+  Settings,
+  LogOut,
+  Bell,
+  X,
+  Wallet,
+  TrendingUp,
+  Bank,
+  FileText
+} from 'lucide-react';
 
 const DashboardMobile = () => {
-  const navigate = useNavigate();  // Ajout du hook navigate
+  const navigate = useNavigate();  
   const [menuOpen, setMenuOpen] = useState(false);
   
-  // Ajout de la fonction de redirection
   const handleAddInvestment = () => {
     navigate('/connections/banks');
   };
 
-  // Ajout des fonctions de navigation
+  // Fonction de navigation
   const handleNavigation = (path) => {
     navigate(path);
-    setMenuOpen(false); // Ferme le menu si ouvert
+    setMenuOpen(false);
   };
 
-  // Menu latéral avec navigation
+  // Menu latéral avec les options correctes
   const SideMenu = () => (
     <div 
       className={`fixed inset-y-0 left-0 w-64 bg-white transform ${
@@ -40,9 +48,10 @@ const DashboardMobile = () => {
         {/* Menu items avec navigation */}
         <nav className="space-y-2">
           {[
-            { icon: Wallet, label: 'Portfolio', path: '/' },
-            { icon: TrendingUp, label: 'Performances', path: '/performance' },
-            { icon: Bell, label: 'Notifications', path: '/notifications' },
+            { icon: Wallet, label: 'Dashboard', path: '/' },
+            { icon: FileText, label: 'Premium', path: '/premium' },
+            { icon: Bank, label: 'Banques', path: '/banks' },
+            { icon: FileText, label: 'Rapports', path: '/reports' },
             { icon: Settings, label: 'Paramètres', path: '/account/settings' },
             { icon: LogOut, label: 'Déconnexion', path: '/logout' }
           ].map((item, index) => (
@@ -76,7 +85,7 @@ const DashboardMobile = () => {
               <h1 className="text-2xl font-bold text-white">InvestSmart</h1>
             </div>
             <button 
-              onClick={handleAddInvestment}  // Ajout du onClick
+              onClick={handleAddInvestment}
               className="p-2 bg-white/90 rounded-full hover:bg-white"
             >
               <Plus size={24} />
@@ -87,15 +96,15 @@ const DashboardMobile = () => {
 
         {/* ... Reste du contenu identique ... */}
 
-        {/* Menu raccourcis avec navigation */}
+        {/* Menu raccourcis avec les nouveaux libellés et navigation */}
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t">
           <div className="max-w-lg mx-auto px-4 py-2">
             <div className="flex justify-around">
               {[
-                { icon: Wallet, label: 'Portfolio', path: '/' },
-                { icon: TrendingUp, label: 'Performance', path: '/performance' },
-                { icon: Eye, label: 'Surveillance', path: '/monitoring' },
-                { icon: Settings, label: 'Réglages', path: '/account/settings' }
+                { icon: Wallet, label: 'Dashboard', path: '/' },
+                { icon: FileText, label: 'Premium', path: '/premium' },
+                { icon: Bank, label: 'Banques', path: '/banks' },
+                { icon: FileText, label: 'Rapports', path: '/reports' }
               ].map((item, index) => (
                 <button 
                   key={index}
