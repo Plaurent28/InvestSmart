@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, Navigate, HashRouter } from 'react-router-dom';
+import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
@@ -193,11 +193,11 @@ function AppContent() {
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <AuthProvider>
         <AppContent />
       </AuthProvider>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
