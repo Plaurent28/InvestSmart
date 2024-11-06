@@ -154,7 +154,7 @@ const DashboardPrincipal = () => {
                       <div>
                         <p className="font-medium text-gray-800">{item.type}</p>
                         <p className="text-sm text-gray-600">
-                          {((item.value / portfolioData.totalValue) * 100).toFixed(1)}% du portfolio
+                          {portfolioData.totalValue > 0 ? ((item.value / portfolioData.totalValue) * 100).toFixed(1) : 0}% du portfolio
                         </p>
                       </div>
                     </div>
