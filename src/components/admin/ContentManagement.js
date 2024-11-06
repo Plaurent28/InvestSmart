@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import {
-  PenSquare,
+  Edit,
   List,
   Eye,
   Clock,
@@ -50,7 +50,7 @@ const ContentManagement = () => {
         <div className="flex justify-between items-start">
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center gap-2">
-              <PenSquare size={32} />
+              <Edit size={32} />
               Gestion du Contenu
             </h1>
             <p className="mt-2 text-white/80">
@@ -163,7 +163,7 @@ const ContentManagement = () => {
                       <Eye size={20} className="text-gray-600" />
                     </button>
                     <button className="p-2 hover:bg-gray-200 rounded-lg">
-                      <PenSquare size={20} className="text-gray-600" />
+                      <Edit size={20} className="text-gray-600" />
                     </button>
                     <button className="p-2 hover:bg-gray-200 rounded-lg text-red-500">
                       <X size={20} />
