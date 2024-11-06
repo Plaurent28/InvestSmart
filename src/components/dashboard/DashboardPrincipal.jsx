@@ -33,13 +33,16 @@ const DashboardPrincipal = () => {
     ]
   });
 
+  // Données par défaut si le total est de 0
+  const defaultData = [
+    { type: 'Aucun Actif', value: 1, color: '#2ecc71' }  // 100% vert par défaut
+  ];
+
   // Simule la récupération des données utilisateur après la connexion de la banque
   useEffect(() => {
-    // Exemple de fonction pour récupérer les données depuis votre backend/API
     const fetchPortfolioData = async () => {
       try {
-        // Simulez une requête API ou utilisez une fonction réelle pour obtenir les données
-        const response = await fetch('/api/user/portfolio'); // Remplacez cette ligne par l'URL de votre API
+        const response = await fetch('/api/user/portfolio');
         const data = await response.json();
         setPortfolioData(data);
       } catch (error) {
@@ -111,15 +114,15 @@ const DashboardPrincipal = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={portfolioData.distribution}
+                      data={portfolioData.totalValue > 0 ? portfolioData.distribution : defaultData}
                       dataKey="value"
                       nameKey="type"
                       cx="50%"
                       cy="50%"
                       outerRadius={80}
-                      label={({ name, percent }) => `${name} ${isNaN(percent) ? 0 : (percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) => `${name} ${percent ? (percent * 100).toFixed(0) : 100}%`}
                     >
-                      {portfolioData.distribution.map((entry, index) => (
+                      {(portfolioData.totalValue > 0 ? portfolioData.distribution : defaultData).map((entry, index) => (
                         <Cell key={index} fill={entry.color} />
                       ))}
                     </Pie>
