@@ -8,10 +8,40 @@ import MainLayout from './layouts/MainLayout';
 import AdminLayout from './layouts/AdminLayout';
 import AuthLayout from './layouts/AuthLayout';
 
-// Import tous les composants nécessaires...
+// Composants du dashboard
 import DashboardPrincipal from './components/dashboard/DashboardPrincipal';
 import FormulaireAjoutInvestissement from './components/dashboard/FormulaireAjoutInvestissement';
-// ... autres imports ...
+import PerformanceGlobaleDetaillee from './components/dashboard/PerformanceGlobaleDetaillee';
+import VueDetailleeInvestissement from './components/dashboard/VueDetailleeInvestissement';
+
+// Composants d'authentification
+import DoubleAuthentification from './components/auth/DoubleAuthentification';
+import SystemeAuthentificationComplet from './components/auth/SystemeAuthentificationComplet';
+
+// Pages publiques
+import PolitiqueConfidentialite from './components/Pages/PolitiqueConfidentialite';
+import SecurisationDonneesFinancieres from './components/Pages/SecurisationDonneesFinancieres';
+import MentionsLegales from './components/Pages/MentionsLegales';
+import PageNotFound from './components/Pages/PageNotFound';
+
+// Composants admin
+import ContentManagement from './components/admin/ContentManagement';
+
+// Import de tous vos autres composants nécessaires selon votre structure
+import ConnexionBanques from './components/connections/ConnexionBanques';
+import ConnexionComptesTitresPea from './components/connections/ConnexionComptesTitresPea';
+import GestionForfaitsPremium from './components/premium/GestionForfaitsPremium';
+import PageDeTarification from './components/premium/PageDeTarification';
+import PaymentForm from './components/premium/PaymentForm';
+import MonCompte from './components/account/MonCompte';
+import Profile from './components/account/Profile';
+import Security from './components/account/Security';
+import Preferences from './components/account/Preferences';
+import GuideDemarrageRapide from './components/guide/GuideDemarrageRapide';
+import ActualitesAnalyses from './components/news/ActualitesAnalyses';
+import CentreDeNotificationsEtSuggestions from './components/notifications/CentreDeNotificationsEtSuggestions';
+import GenerateurRapportsFiscaux from './components/reports/GenerateurRapportsFiscaux';
+import SimulateurScenariosInvestissements from './components/simulator/SimulateurScenariosInvestissements';
 
 // Composant pour protéger les routes
 const ProtectedRoute = ({ children, requireAdmin = false }) => {
@@ -50,13 +80,6 @@ function AppContent() {
     return <LoadingSpinner />;
   }
 
-  // Routes publiques qui ne nécessitent pas d'authentification
-  const publicRoutes = [
-    { path: 'privacy-policy', element: <PolitiqueConfidentialite /> },
-    { path: 'data-security', element: <SecurisationDonneesFinancieres /> },
-    { path: 'legal-notices', element: <MentionsLegales /> },
-  ];
-
   return (
     <Routes>
       {/* Routes d'authentification */}
@@ -88,22 +111,50 @@ function AppContent() {
           </ProtectedRoute>
         }
       >
+        {/* Dashboard */}
         <Route index element={<DashboardPrincipal />} />
-        
-        {/* Routes du dashboard */}
         <Route path="dashboard">
           <Route path="add-investment" element={<FormulaireAjoutInvestissement />} />
           <Route path="performance" element={<PerformanceGlobaleDetaillee />} />
           <Route path="investment/:id" element={<VueDetailleeInvestissement />} />
         </Route>
 
-        {/* Routes des autres fonctionnalités... */}
-        {/* ... vos autres routes ... */}
+        {/* Connexions */}
+        <Route path="connections">
+          <Route path="banks" element={<ConnexionBanques />} />
+          <Route path="trading-accounts" element={<ConnexionComptesTitresPea />} />
+        </Route>
 
-        {/* Routes publiques */}
-        {publicRoutes.map(({ path, element }) => (
-          <Route key={path} path={path} element={element} />
-        ))}
+        {/* Premium */}
+        <Route path="premium">
+          <Route index element={<PageDeTarification />} />
+          <Route path="manage" element={<GestionForfaitsPremium />} />
+          <Route path="payment" element={<PaymentForm />} />
+        </Route>
+
+        {/* Compte utilisateur */}
+        <Route path="account">
+          <Route index element={<MonCompte />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="security" element={<Security />} />
+          <Route path="preferences" element={<Preferences />} />
+          <Route path="subscription" element={<GestionForfaitsPremium />} />
+        </Route>
+
+        {/* Autres fonctionnalités */}
+        <Route path="guide" element={<GuideDemarrageRapide />} />
+        <Route path="news" element={<ActualitesAnalyses />} />
+        <Route path="notifications" element={<CentreDeNotificationsEtSuggestions />} />
+        <Route path="reports">
+          <Route index element={<GenerateurRapportsFiscaux />} />
+          <Route path=":year" element={<GenerateurRapportsFiscaux />} />
+        </Route>
+        <Route path="simulator" element={<SimulateurScenariosInvestissements />} />
+
+        {/* Pages publiques */}
+        <Route path="privacy-policy" element={<PolitiqueConfidentialite />} />
+        <Route path="data-security" element={<SecurisationDonneesFinancieres />} />
+        <Route path="legal-notices" element={<MentionsLegales />} />
       </Route>
 
       {/* Page 404 */}
