@@ -1,28 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import {
-  Building,
-  Plus,
-  RefreshCcw,
-  Lock,
-  CheckCircle2,
-  AlertTriangle,
-  X,
-  ChevronRight,
-  Clock,
-  Settings,
-  Shield,
-  Info,
-  Link2,
-  AlertCircle
-} from 'lucide-react';
+import { Building, ChevronRight } from 'lucide-react';
 
 const ConnexionBanques = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef(null);
-  const [connectedBanks, setConnectedBanks] = useState([]);
-  
+
   const bankOptions = [
     { id: 1, name: 'Crédit Agricole' },
     { id: 2, name: 'BNP Paribas' },
@@ -44,12 +28,13 @@ const ConnexionBanques = () => {
     { id: 18, name: 'Crédit du Nord' },
     { id: 19, name: 'BforBank' },
     { id: 20, name: 'Orange Bank' },
-    { id: 21, name: 'Bourse Direct' },      
+    { id: 21, name: 'Bourse Direct' },
     { id: 22, name: 'Saxo Banque' },
-    { id: 23, name: 'Trade Republic' },       
-    { id: 24, name: 'Linxea' } 
+    { id: 23, name: 'Trade Republic' },
+    { id: 24, name: 'Linxea' }
   ];
 
+  // Gestion des clics extérieurs pour fermer la liste déroulante
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -60,6 +45,11 @@ const ConnexionBanques = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Filtrer les options de la liste en fonction de la recherche
+  const filteredBanks = bankOptions.filter(bank =>
+    bank.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#869D78' }}>
@@ -91,23 +81,21 @@ const ConnexionBanques = () => {
               </div>
 
               {/* Liste déroulante de banques */}
-              {showDropdown && (
+              {showDropdown && searchTerm && filteredBanks.length > 0 && (
                 <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-lg border border-gray-100 max-h-96 overflow-auto">
-                  {bankOptions
-                    .filter(bank => bank.name.toLowerCase().includes(searchTerm.toLowerCase()))
-                    .map((bank) => (
-                      <button
-                        key={bank.id}
-                        className="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center justify-between"
-                        onClick={() => {
-                          setSearchTerm(bank.name);
-                          setShowDropdown(false);
-                        }}
-                      >
-                        <span className="font-medium">{bank.name}</span>
-                        <ChevronRight size={16} className="text-gray-400" />
-                      </button>
-                    ))}
+                  {filteredBanks.map((bank) => (
+                    <button
+                      key={bank.id}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center justify-between"
+                      onClick={() => {
+                        setSearchTerm(bank.name);
+                        setShowDropdown(false);
+                      }}
+                    >
+                      <span className="font-medium">{bank.name}</span>
+                      <ChevronRight size={16} className="text-gray-400" />
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
@@ -127,51 +115,6 @@ const ConnexionBanques = () => {
             </div>
           </CardContent>
         </Card>
-
-        {/* Informations complémentaires */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="bg-white/90 backdrop-blur-sm border-0 z-0">
-            <CardContent className="p-4 text-center">
-              <div className="flex flex-col items-center gap-3">
-                <div className="p-2 bg-blue-50 rounded-lg">
-                  <Link2 className="text-blue-600" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-medium">Import automatique</h3>
-                  <p className="text-sm text-gray-600">Synchronisation quotidienne</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/90 backdrop-blur-sm border-0 z-0">
-            <CardContent className="p-4 text-center">
-              <div className="flex flex-col items-center gap-3">
-                <div className="p-2 bg-green-50 rounded-lg">
-                  <Shield className="text-green-600" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-medium">Connexion sécurisée</h3>
-                  <p className="text-sm text-gray-600">Protocole DSP2</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/90 backdrop-blur-sm border-0 z-0">
-            <CardContent className="p-4 text-center">
-              <div className="flex flex-col items-center gap-3">
-                <div className="p-2 bg-purple-50 rounded-lg">
-                  <AlertCircle className="text-purple-600" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-medium">Support dédié</h3>
-                  <p className="text-sm text-gray-600">Assistance 7j/7</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </div>
   );
