@@ -10,7 +10,7 @@ import {
   LogOut,
   ChevronRight,
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext'; // Assurez-vous que ce contexte est bien défini pour l'authentification
+import { useAuth } from '../../contexts/AuthContext'; // Assurez-vous que ce contexte est bien défini pour l'authentification
 
 const MonCompte = () => {
   const navigate = useNavigate();
