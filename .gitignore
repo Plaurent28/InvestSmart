@@ -107,3 +107,4 @@ out/
 .DS_Store
 *.pem
 .history/
+.vercel
