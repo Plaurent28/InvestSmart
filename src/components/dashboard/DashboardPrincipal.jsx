@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { 
@@ -12,6 +13,12 @@ import {
 } from 'lucide-react';
 
 const DashboardPrincipal = () => {
+  const navigate = useNavigate();
+  
+  const handleAddInvestment = () => {
+    navigate('/connections/banks');
+  };
+
   const [portfolioData] = useState({
     totalValue: 170000,
     distribution: [
@@ -34,6 +41,7 @@ const DashboardPrincipal = () => {
             <h2 className="text-xl text-white">Mon Portfolio</h2>
           </div>
           <button 
+            onClick={handleAddInvestment}
             className="flex items-center gap-2 bg-white/90 text-gray-800 px-4 py-2 rounded-lg hover:bg-white transition-colors"
           >
             <Plus size={20} />

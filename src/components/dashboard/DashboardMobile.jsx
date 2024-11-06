@@ -1,38 +1,25 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';  // Ajout de l'import
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { 
-  Wallet, 
-  Building2, 
-  LineChart, 
-  Bitcoin,
-  TrendingUp,
-  Plus,
-  Landmark,
-  Menu,
-  X,
-  Settings,
-  LogOut,
-  Bell,
-  ChevronRight,
-  Eye
-} from 'lucide-react';
+// ... autres imports restent identiques
 
 const DashboardMobile = () => {
+  const navigate = useNavigate();  // Ajout du hook navigate
   const [menuOpen, setMenuOpen] = useState(false);
-  const [portfolioData] = useState({
-    totalValue: 170000,
-    distribution: [
-      { type: 'PEA', value: 50000, color: '#3498db' },
-      { type: 'Compte-Titres', value: 30000, color: '#2ecc71' },
-      { type: 'Crypto', value: 20000, color: '#f1c40f' },
-      { type: 'Immobilier', value: 40000, color: '#e74c3c' },
-      { type: 'SCPI', value: 10000, color: '#9b59b6' },
-      { type: 'Épargne', value: 20000, color: '#34495e' }
-    ]
-  });
+  
+  // Ajout de la fonction de redirection
+  const handleAddInvestment = () => {
+    navigate('/connections/banks');
+  };
 
-  // Menu latéral
+  // Ajout des fonctions de navigation
+  const handleNavigation = (path) => {
+    navigate(path);
+    setMenuOpen(false); // Ferme le menu si ouvert
+  };
+
+  // Menu latéral avec navigation
   const SideMenu = () => (
     <div 
       className={`fixed inset-y-0 left-0 w-64 bg-white transform ${
@@ -50,17 +37,18 @@ const DashboardMobile = () => {
           </button>
         </div>
         
-        {/* Menu items */}
+        {/* Menu items avec navigation */}
         <nav className="space-y-2">
           {[
-            { icon: Wallet, label: 'Portfolio' },
-            { icon: TrendingUp, label: 'Performances' },
-            { icon: Bell, label: 'Notifications' },
-            { icon: Settings, label: 'Paramètres' },
-            { icon: LogOut, label: 'Déconnexion' }
+            { icon: Wallet, label: 'Portfolio', path: '/' },
+            { icon: TrendingUp, label: 'Performances', path: '/performance' },
+            { icon: Bell, label: 'Notifications', path: '/notifications' },
+            { icon: Settings, label: 'Paramètres', path: '/account/settings' },
+            { icon: LogOut, label: 'Déconnexion', path: '/logout' }
           ].map((item, index) => (
             <button 
               key={index}
+              onClick={() => handleNavigation(item.path)}
               className="flex items-center gap-3 w-full p-3 hover:bg-gray-100 rounded-lg"
             >
               <item.icon size={20} className="text-gray-600" />
@@ -87,122 +75,44 @@ const DashboardMobile = () => {
               </button>
               <h1 className="text-2xl font-bold text-white">InvestSmart</h1>
             </div>
-            <button className="p-2 bg-white/90 rounded-full hover:bg-white">
+            <button 
+              onClick={handleAddInvestment}  // Ajout du onClick
+              className="p-2 bg-white/90 rounded-full hover:bg-white"
+            >
               <Plus size={24} />
             </button>
           </div>
           <h2 className="text-xl text-white">Mon Portfolio</h2>
         </div>
 
-        {/* Valeur totale */}
-        <Card className="mx-4 bg-white/90 backdrop-blur-sm border-0">
-          <CardContent className="p-4">
-            <div className="flex flex-col items-center gap-2">
-              <p className="text-sm text-gray-600">Valeur Totale</p>
-              <p className="text-3xl font-bold">
-                {portfolioData.totalValue.toLocaleString('fr-FR')} €
-              </p>
-              <div className="flex items-center gap-1 text-green-600">
-                <TrendingUp size={16} />
-                <span className="font-medium">+12.5%</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {/* ... Reste du contenu identique ... */}
 
-        {/* Distribution en camembert */}
-        <Card className="mx-4 mt-4 bg-white/90 backdrop-blur-sm border-0">
-          <CardHeader>
-            <CardTitle>Répartition des Actifs</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={portfolioData.distribution}
-                    dataKey="value"
-                    nameKey="type"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    label={({name, percent}) => `${(percent * 100).toFixed(0)}%`}
-                  >
-                    {portfolioData.distribution.map((entry, index) => (
-                      <Cell key={index} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    formatter={(value) => value.toLocaleString('fr-FR') + ' €'}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Liste des investissements */}
-        <Card className="mx-4 mt-4 mb-20 bg-white/90 backdrop-blur-sm border-0">
-          <CardHeader>
-            <CardTitle>Détail par Catégorie</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {portfolioData.distribution.map((item, index) => (
+        {/* Menu raccourcis avec navigation */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t">
+          <div className="max-w-lg mx-auto px-4 py-2">
+            <div className="flex justify-around">
+              {[
+                { icon: Wallet, label: 'Portfolio', path: '/' },
+                { icon: TrendingUp, label: 'Performance', path: '/performance' },
+                { icon: Eye, label: 'Surveillance', path: '/monitoring' },
+                { icon: Settings, label: 'Réglages', path: '/account/settings' }
+              ].map((item, index) => (
                 <button 
                   key={index}
-                  className="w-full flex items-center justify-between p-3 bg-white/50 rounded-lg hover:bg-white/80 transition-colors"
+                  onClick={() => handleNavigation(item.path)}
+                  className="flex flex-col items-center p-2"
                 >
-                  <div className="flex items-center gap-3">
-                    {item.type === 'PEA' && <LineChart className="text-blue-500" />}
-                    {item.type === 'Compte-Titres' && <LineChart className="text-green-500" />}
-                    {item.type === 'Crypto' && <Bitcoin className="text-yellow-500" />}
-                    {item.type === 'Immobilier' && <Building2 className="text-red-500" />}
-                    {item.type === 'SCPI' && <Building2 className="text-purple-500" />}
-                    {item.type === 'Épargne' && <Landmark className="text-gray-700" />}
-                    <div className="flex-1 text-left">
-                      <p className="font-medium text-gray-800">{item.type}</p>
-                      <p className="text-sm text-gray-600">
-                        {item.value.toLocaleString('fr-FR')} €
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-sm text-gray-600 mr-2">
-                      {((item.value / portfolioData.totalValue) * 100).toFixed(1)}%
-                    </span>
-                    <ChevronRight size={20} className="text-gray-400" />
-                  </div>
+                  <item.icon size={24} className="text-gray-600" />
+                  <span className="text-xs text-gray-600 mt-1">{item.label}</span>
                 </button>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Menu raccourcis */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t">
-        <div className="max-w-lg mx-auto px-4 py-2">
-          <div className="flex justify-around">
-            {[
-              { icon: Wallet, label: 'Portfolio' },
-              { icon: TrendingUp, label: 'Performance' },
-              { icon: Eye, label: 'Surveillance' },
-              { icon: Settings, label: 'Réglages' }
-            ].map((item, index) => (
-              <button 
-                key={index}
-                className="flex flex-col items-center p-2"
-              >
-                <item.icon size={24} className="text-gray-600" />
-                <span className="text-xs text-gray-600 mt-1">{item.label}</span>
-              </button>
-            ))}
           </div>
         </div>
+
+        {/* ... Reste du composant identique ... */}
       </div>
 
-      {/* Menu latéral et overlay */}
       <SideMenu />
       {menuOpen && (
         <div 
