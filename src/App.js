@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, HashRouter } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
@@ -27,7 +27,7 @@ import PageNotFound from './components/Pages/PageNotFound';
 // Composants admin
 import ContentManagement from './components/admin/ContentManagement';
 
-// Import de tous vos autres composants nécessaires selon votre structure
+// Import de tous vos autres composants
 import ConnexionBanques from './components/connections/ConnexionBanques';
 import ConnexionComptesTitresPea from './components/connections/ConnexionComptesTitresPea';
 import GestionForfaitsPremium from './components/premium/GestionForfaitsPremium';
@@ -62,6 +62,21 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
   return children;
 };
 
+// Composant pour les routes publiques
+const PublicRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
 function AppContent() {
   const { loading } = useAuth();
   const [isMobile, setIsMobile] = useState(false);
@@ -80,11 +95,24 @@ function AppContent() {
     return <LoadingSpinner />;
   }
 
+  const publicPages = [
+    { path: "privacy-policy", element: <PolitiqueConfidentialite /> },
+    { path: "data-security", element: <SecurisationDonneesFinancieres /> },
+    { path: "legal-notices", element: <MentionsLegales /> }
+  ];
+
   return (
     <Routes>
       {/* Routes d'authentification */}
       <Route element={<AuthLayout />}>
-        <Route path="/login" element={<SystemeAuthentificationComplet />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <SystemeAuthentificationComplet />
+            </PublicRoute>
+          }
+        />
         <Route path="/2fa" element={<DoubleAuthentification />} />
       </Route>
 
@@ -152,9 +180,9 @@ function AppContent() {
         <Route path="simulator" element={<SimulateurScenariosInvestissements />} />
 
         {/* Pages publiques */}
-        <Route path="privacy-policy" element={<PolitiqueConfidentialite />} />
-        <Route path="data-security" element={<SecurisationDonneesFinancieres />} />
-        <Route path="legal-notices" element={<MentionsLegales />} />
+        {publicPages.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} />
+        ))}
       </Route>
 
       {/* Page 404 */}
@@ -165,9 +193,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <HashRouter>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </HashRouter>
   );
 }
 
