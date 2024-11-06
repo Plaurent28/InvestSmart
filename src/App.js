@@ -8,7 +8,6 @@ import { useAuth } from './contexts/AuthContext';
 
 // Import des composants du dashboard
 import DashboardPrincipal from './components/dashboard/DashboardPrincipal';
-import DashboardMobile from './components/dashboard/DashboardMobile';
 import FormulaireAjoutInvestissement from './components/dashboard/FormulaireAjoutInvestissement';
 import PerformanceGlobaleDetaillee from './components/dashboard/PerformanceGlobaleDetaillee';
 import VueDetailleeInvestissement from './components/dashboard/VueDetailleeInvestissement';
@@ -84,7 +83,7 @@ function App() {
       {/* Routes principales */}
       <Route path="/" element={<MainLayout />}>
         {/* Dashboard */}
-        <Route index element={isMobile ? <DashboardMobile /> : <DashboardPrincipal />} />
+        <Route index element={<DashboardPrincipal />} />
         <Route path="dashboard">
           <Route path="add-investment" element={<FormulaireAjoutInvestissement />} />
           <Route path="performance" element={<PerformanceGlobaleDetaillee />} />
