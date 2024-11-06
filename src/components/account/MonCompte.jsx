@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   User,
@@ -10,16 +10,23 @@ import {
   LogOut,
   ChevronRight,
 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext'; // Assurez-vous que ce contexte est bien défini pour l'authentification
 
 const MonCompte = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [userInfo] = useState({
-    nom: 'John Doe',
-    email: 'john.doe@example.com',
-    forfait: 'Premium',
-    avatar: null, // URL de l'avatar si disponible
-  });
+  const { user, isAuthenticated, logout } = useAuth(); // Utilisation du contexte pour l'utilisateur connecté
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login'); // Redirige vers la page de connexion si l'utilisateur n'est pas authentifié
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Redirection pendant la vérification de l'authentification
+  if (!isAuthenticated) {
+    return null; // Ou un composant de chargement si nécessaire
+  }
 
   const menuItems = [
     {
@@ -27,47 +34,47 @@ const MonCompte = () => {
       label: 'Informations personnelles',
       icon: User,
       path: '/account/profile',
-      description: 'Gérez vos informations personnelles et vos préférences de compte'
+      description: 'Gérez vos informations personnelles et vos préférences de compte',
     },
     {
       id: 'security',
       label: 'Sécurité',
       icon: Shield,
       path: '/account/security',
-      description: 'Modifiez votre mot de passe et gérez la double authentification'
+      description: 'Modifiez votre mot de passe et gérez la double authentification',
     },
     {
       id: 'notifications',
       label: 'Notifications',
       icon: Bell,
       path: '/account/preferences',
-      description: 'Personnalisez vos préférences de notifications'
+      description: 'Personnalisez vos préférences de notifications',
     },
     {
       id: 'subscription',
       label: 'Abonnement',
       icon: CreditCard,
       path: '/account/subscription',
-      description: 'Gérez votre abonnement et consultez vos factures'
+      description: 'Gérez votre abonnement et consultez vos factures',
     },
     {
       id: 'documents',
       label: 'Documents',
       icon: FileText,
       path: '/account/documents',
-      description: 'Accédez à vos documents et rapports'
+      description: 'Accédez à vos documents et rapports',
     },
     {
       id: 'settings',
       label: 'Paramètres',
       icon: Settings,
       path: '/account/settings',
-      description: 'Configurez les paramètres de votre compte'
+      description: 'Configurez les paramètres de votre compte',
     },
   ];
 
   const handleLogout = () => {
-    // Logique de déconnexion
+    logout();
     navigate('/login');
   };
 
@@ -78,9 +85,9 @@ const MonCompte = () => {
         <div className="bg-white shadow rounded-lg mb-6 p-6">
           <div className="flex items-center space-x-4">
             <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
-              {userInfo.avatar ? (
+              {user.avatar ? (
                 <img
-                  src={userInfo.avatar}
+                  src={user.avatar}
                   alt="Profile"
                   className="h-16 w-16 rounded-full"
                 />
@@ -89,11 +96,13 @@ const MonCompte = () => {
               )}
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{userInfo.nom}</h1>
-              <p className="text-gray-500">{userInfo.email}</p>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-2">
-                {userInfo.forfait}
-              </span>
+              <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+              <p className="text-gray-500">{user.email}</p>
+              {user.forfait === 'Premium' && (
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-2">
+                  Premium
+                </span>
+              )}
             </div>
           </div>
         </div>
