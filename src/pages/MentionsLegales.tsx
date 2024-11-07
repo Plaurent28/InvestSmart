@@ -1,17 +1,5 @@
 import React from 'react';
-import {
-  Building,
-  Mail,
-  Phone,
-  Globe,
-  Shield,
-  Server,
-  HardDrive,
-  Users,
-  Scale,
-  Clock,
-  Info
-} from 'lucide-react';
+import { Building, Mail, Server, Shield, Users, Scale, Clock, Info } from 'lucide-react';
 
 const MentionsLegales = () => {
   const sections = [
@@ -20,34 +8,13 @@ const MentionsLegales = () => {
       title: "Éditeur du site",
       Icon: Building,
       content: [
-        {
-          label: "Raison sociale",
-          value: "[Nom de la société]"
-        },
-        {
-          label: "Forme juridique",
-          value: "Société par Actions Simplifiée (SAS)"
-        },
-        {
-          label: "Capital social",
-          value: "[Montant] euros"
-        },
-        {
-          label: "RCS",
-          value: "[Ville + Numéro]"
-        },
-        {
-          label: "SIRET",
-          value: "[Numéro SIRET]"
-        },
-        {
-          label: "TVA Intracommunautaire",
-          value: "[Numéro TVA]"
-        },
-        {
-          label: "Siège social",
-          value: "[Adresse complète]"
-        }
+        { label: "Raison sociale", value: "[Nom de la société]" },
+        { label: "Forme juridique", value: "Société par Actions Simplifiée (SAS)" },
+        { label: "Capital social", value: "[Montant] euros" },
+        { label: "RCS", value: "[Ville + Numéro]" },
+        { label: "SIRET", value: "[Numéro SIRET]" },
+        { label: "TVA Intracommunautaire", value: "[Numéro TVA]" },
+        { label: "Siège social", value: "[Adresse complète]" }
       ]
     },
     {
@@ -55,14 +22,8 @@ const MentionsLegales = () => {
       title: "Direction de la publication",
       Icon: Users,
       content: [
-        {
-          label: "Directeur de la publication",
-          value: "[Nom du directeur]"
-        },
-        {
-          label: "Responsable de la rédaction",
-          value: "[Nom du responsable]"
-        }
+        { label: "Directeur de la publication", value: "[Nom du directeur]" },
+        { label: "Responsable de la rédaction", value: "[Nom du responsable]" }
       ]
     },
     {
@@ -70,18 +31,9 @@ const MentionsLegales = () => {
       title: "Contact",
       Icon: Mail,
       content: [
-        {
-          label: "Email",
-          value: "contact@[domaine].com"
-        },
-        {
-          label: "Téléphone",
-          value: "[Numéro]"
-        },
-        {
-          label: "Formulaire de contact",
-          value: "Disponible dans votre espace client"
-        }
+        { label: "Email", value: "contact@[domaine].com" },
+        { label: "Téléphone", value: "[Numéro]" },
+        { label: "Formulaire de contact", value: "Disponible dans votre espace client" }
       ]
     },
     {
@@ -89,22 +41,10 @@ const MentionsLegales = () => {
       title: "Hébergement",
       Icon: Server,
       content: [
-        {
-          label: "Hébergeur",
-          value: "[Nom de l'hébergeur]"
-        },
-        {
-          label: "Forme juridique",
-          value: "[Forme juridique de l'hébergeur]"
-        },
-        {
-          label: "Adresse",
-          value: "[Adresse de l'hébergeur]"
-        },
-        {
-          label: "Localisation des données",
-          value: "France/Union Européenne"
-        }
+        { label: "Hébergeur", value: "[Nom de l'hébergeur]" },
+        { label: "Forme juridique", value: "[Forme juridique de l'hébergeur]" },
+        { label: "Adresse", value: "[Adresse de l'hébergeur]" },
+        { label: "Localisation des données", value: "France/Union Européenne" }
       ]
     },
     {
@@ -112,22 +52,10 @@ const MentionsLegales = () => {
       title: "Protection des données",
       Icon: Shield,
       content: [
-        {
-          label: "DPO",
-          value: "[Nom du DPO]"
-        },
-        {
-          label: "Email DPO",
-          value: "dpo@[domaine].com"
-        },
-        {
-          label: "Déclaration CNIL",
-          value: "Numéro d'enregistrement : [Numéro]"
-        },
-        {
-          label: "Politique de confidentialité",
-          value: "Consultable dans les paramètres de votre compte"
-        }
+        { label: "DPO", value: "[Nom du DPO]" },
+        { label: "Email DPO", value: "dpo@[domaine].com" },
+        { label: "Déclaration CNIL", value: "Numéro d'enregistrement : [Numéro]" },
+        { label: "Politique de confidentialité", value: "Consultable dans les paramètres de votre compte" }
       ]
     },
     {
@@ -135,18 +63,9 @@ const MentionsLegales = () => {
       title: "Propriété intellectuelle",
       Icon: Scale,
       content: [
-        {
-          label: "Copyright",
-          value: "© 2024 [Nom de la société]. Tous droits réservés."
-        },
-        {
-          label: "Marques déposées",
-          value: "Toutes les marques citées sont la propriété de leurs détenteurs respectifs"
-        },
-        {
-          label: "Licence",
-          value: "Utilisation soumise à conditions, voir CGU"
-        }
+        { label: "Copyright", value: "© 2024 [Nom de la société]. Tous droits réservés." },
+        { label: "Marques déposées", value: "Toutes les marques citées sont la propriété de leurs détenteurs respectifs" },
+        { label: "Licence", value: "Utilisation soumise à conditions, voir CGU" }
       ]
     }
   ];
