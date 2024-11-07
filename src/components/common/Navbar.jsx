@@ -1,54 +1,46 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
+import { Bell } from 'lucide-react';
 
 const Navbar = () => {
-  const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
   return (
     <nav className="bg-white shadow">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <Link to="/" className="flex items-center">
-              <span className="text-xl font-bold text-gray-800">InvestSmart</span>
-            </Link>
+            <div className="flex-shrink-0 flex items-center">
+              <Link to="/" className="text-xl font-bold">InvestSmart</Link>
+            </div>
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <Link to="/dashboard" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                Dashboard
+              </Link>
+              <Link to="/premium" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                Premium
+              </Link>
+              <Link to="/banques" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                Banques
+              </Link>
+              <Link to="/rapports" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                Rapports
+              </Link>
+            </div>
           </div>
-          
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center">
+            {isAuthenticated && (
+              <button className="p-2 rounded-full text-gray-600 hover:text-gray-900">
+                <Bell className="h-6 w-6" />
+              </button>
+            )}
             <Link
-              to="/dashboard"
-              className={`px-3 py-2 rounded-md ${
-                location.pathname === '/dashboard'
-                  ? 'bg-gray-100 text-gray-900'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+              to={isAuthenticated ? "/compte" : "/login"}
+              className="ml-4 px-4 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700"
             >
-              Dashboard
+              {isAuthenticated ? "Mon Compte" : "Se connecter"}
             </Link>
-            
-            <Link
-              to="/premium"
-              className={`px-3 py-2 rounded-md ${
-                location.pathname === '/premium'
-                  ? 'bg-gray-100 text-gray-900'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              Premium
-            </Link>
-
-            <Link
-              to="/guide"
-              className={`px-3 py-2 rounded-md ${
-                location.pathname === '/guide'
-                  ? 'bg-gray-100 text-gray-900'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              Guide
-            </Link>
-
-            {/* Autres liens de navigation */}
           </div>
         </div>
       </div>
