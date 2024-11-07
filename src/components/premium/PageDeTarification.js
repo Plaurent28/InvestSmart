@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PricingToggle from '../components/PricingToggle';
 
 const PageDeTarification = () => {
   const navigate = useNavigate();
-  const [billingPeriod, setBillingPeriod] = useState('monthly');
+  const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' ou 'annual'
 
   const forfaits = [
     {
       id: 'starter',
       nom: 'Starter',
-      prix: { monthly: '0', annual: '0' },
+      prix: {
+        monthly: '0',
+        annual: '0'
+      },
       description: 'Pour démarrer',
       meilleurChoix: false,
       fonctionnalites: [
@@ -23,8 +25,13 @@ const PageDeTarification = () => {
     {
       id: 'premium',
       nom: 'Premium',
-      prix: { monthly: '9.99', annual: '99.99' },
-      reduction: { annual: '16%' },
+      prix: {
+        monthly: '9.99',
+        annual: '99.99'
+      },
+      reduction: {
+        annual: '16%' // Réduction pour l'abonnement annuel
+      },
       description: 'Pour les investisseurs actifs',
       meilleurChoix: true,
       fonctionnalites: [
@@ -69,7 +76,35 @@ const PageDeTarification = () => {
           </p>
 
           {/* Sélecteur de période de facturation */}
-          <PricingToggle billingPeriod={billingPeriod} setBillingPeriod={setBillingPeriod} />
+          <div className="flex justify-center items-center space-x-4 mb-12">
+            <div className="bg-white rounded-lg p-1 shadow-sm inline-flex">
+              <button
+                onClick={() => setBillingPeriod('monthly')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  billingPeriod === 'monthly'
+                    ? 'bg-green-600 text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Mensuel
+              </button>
+              <button
+                onClick={() => setBillingPeriod('annual')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  billingPeriod === 'annual'
+                    ? 'bg-green-600 text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Annuel
+              </button>
+            </div>
+            {billingPeriod === 'annual' && (
+              <span className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
+                16% de réduction
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Grille des forfaits */}
