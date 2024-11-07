@@ -1,34 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import Navbar from './components/Navbar';
+import { AuthProvider } from './contexts/AuthContext';
 import AccountPage from './components/account/AccountPage';
-
-// Composant qui protège les routes nécessitant une authentification
-const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return children;
-};
 
 const App = () => {
   return (
     <AuthProvider>
       <Router>
-        <div>
-          <Navbar />
+        <div className="min-h-screen bg-gray-50">
           <Routes>
             {/* Routes publiques */}
             <Route path="/" element={<div>Page d'accueil</div>} />
             <Route 
               path="/login" 
-              element={
-                <AccountPage initialView="login" />
-              } 
+              element={<AccountPage initialView="login" />}
             />
 
             {/* Routes protégées */}
@@ -40,12 +25,24 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            {/* Ajoutez d'autres routes protégées ici */}
+            {/* Redirection par défaut */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </Router>
     </AuthProvider>
   );
+};
+
+// Composant qui protège les routes nécessitant une authentification
+const PrivateRoute = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return children;
 };
 
 export default App;
