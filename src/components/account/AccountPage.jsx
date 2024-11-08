@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import LoginForm from './LoginForm';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import AccountDashboard from './AccountDashboard';
+import Alert from '../ui/alert';
 
 const AccountPage = ({ initialView = 'login' }) => {
   const { isAuthenticated, login, logout } = useAuth();
