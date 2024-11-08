@@ -1,50 +1,42 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
 import LoginForm from './LoginForm';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import AccountDashboard from './AccountDashboard';
-import Alert from '../ui/alert';
 
-const AccountPage = ({ initialView = 'login' }) => {
-  const { isAuthenticated, login, logout } = useAuth();
+const AccountPage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [email, setEmail] = useState('');
   const [resetEmailSent, setResetEmailSent] = useState(false);
-  const navigate = useNavigate();
 
-  const handleLogin = (email, password) => {
-    // Ici, vous feriez normalement un appel API pour vérifier les identifiants
-    login({ email, name: 'John Doe' });
-    navigate('/compte');
+  const handleLogin = (loginEmail, password) => {
+    if (loginEmail && password) {
+      setIsLoggedIn(true);
+      setEmail(loginEmail);
+    }
   };
 
   const handleLogout = () => {
-    logout();
-    navigate('/login');
+    setIsLoggedIn(false);
+    setEmail('');
+    setShowForgotPassword(false);
+    setResetEmailSent(false);
   };
 
-  const handleForgotPassword = (email) => {
+  const handleForgotPassword = (resetEmail) => {
     setResetEmailSent(true);
-    // Ici, vous feriez normalement un appel API pour envoyer l'email de réinitialisation
+    setEmail(resetEmail);
   };
 
-  // Si l'utilisateur est authentifié et qu'on est sur la page de login, rediriger vers le dashboard
-  if (isAuthenticated && initialView === 'login') {
-    return <Navigate to="/compte" replace />;
-  }
-
-  // Si l'utilisateur n'est pas authentifié et qu'on essaie d'accéder au dashboard, rediriger vers login
-  if (!isAuthenticated && initialView === 'dashboard') {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (isAuthenticated) {
-    return <AccountDashboard onLogout={handleLogout} />;
+  if (isLoggedIn) {
+    return <AccountDashboard email={email} onLogout={handleLogout} />;
   }
 
   if (showForgotPassword) {
     return (
       <ForgotPasswordForm
+        email={email}
+        setEmail={setEmail}
         onBack={() => {
           setShowForgotPassword(false);
           setResetEmailSent(false);
