@@ -28,6 +28,7 @@ import PaymentForm from './components/premium/PaymentForm';
 // Import des composants du compte
 import MonCompte from './components/account/MonCompte';
 import Profile from './components/account/Profile';
+import PersonalInfoPage from './components/account/PersonalInfoPage';
 import Security from './components/account/Security';
 import Preferences from './components/account/Preferences';
 
@@ -107,6 +108,7 @@ function App() {
         <Route path="account">
           <Route index element={<MonCompte />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="informations" element={<PersonalInfoPage />} />
           <Route path="security" element={<Security />} />
           <Route path="preferences" element={<Preferences />} />
           <Route path="subscription" element={<GestionForfaitsPremium />} />
