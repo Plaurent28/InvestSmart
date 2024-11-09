@@ -43,7 +43,7 @@ const MainLayout = () => {
                 to="/reports"
                 className="text-gray-600 hover:text-gray-900"
               >
-                Rapports
+                Reports
               </Link>
             </nav>
 
