@@ -9,6 +9,7 @@ import {
   Settings,
   LogOut,
   ChevronRight,
+  BarChart3,  // Ajouté pour les rapports
 } from 'lucide-react';
 
 const MonCompte = () => {
@@ -18,7 +19,7 @@ const MonCompte = () => {
     nom: 'John Doe',
     email: 'john.doe@example.com',
     forfait: 'Premium',
-    avatar: null, // URL de l'avatar si disponible
+    avatar: null,
   });
 
   const menuItems = [
@@ -51,6 +52,25 @@ const MonCompte = () => {
       description: 'Gérez votre abonnement et consultez vos factures'
     },
     {
+      id: 'reports',  // Nouvelle section rapports
+      label: 'Rapports',
+      icon: BarChart3,
+      path: '/reports',
+      description: 'Consultez vos rapports fiscaux et analyses de performance',
+      subItems: [  // Ajout de sous-éléments pour les différents types de rapports
+        {
+          id: 'fiscal-reports',
+          label: 'Rapports Fiscaux',
+          path: '/reports'
+        },
+        {
+          id: 'performance-reports',
+          label: 'Analyses de Performance',
+          path: '/reports/performance'
+        }
+      ]
+    },
+    {
       id: 'documents',
       label: 'Documents',
       icon: FileText,
@@ -69,6 +89,16 @@ const MonCompte = () => {
   const handleLogout = () => {
     // Logique de déconnexion
     navigate('/login');
+  };
+
+  const handleMenuItemClick = (item) => {
+    if (item.subItems) {
+      // Si l'élément a des sous-items, on peut gérer l'expansion/réduction
+      // ou naviguer vers une page de vue d'ensemble
+      navigate(item.path);
+    } else {
+      navigate(item.path);
+    }
   };
 
   return (
@@ -103,7 +133,7 @@ const MonCompte = () => {
           {menuItems.map((item) => (
             <div
               key={item.id}
-              onClick={() => navigate(item.path)}
+              onClick={() => handleMenuItemClick(item)}
               className="bg-white shadow rounded-lg p-6 cursor-pointer hover:shadow-md transition-shadow duration-200"
             >
               <div className="flex items-start justify-between">
@@ -118,6 +148,22 @@ const MonCompte = () => {
                     <p className="mt-1 text-sm text-gray-500">
                       {item.description}
                     </p>
+                    {item.subItems && (
+                      <div className="mt-2 space-y-1">
+                        {item.subItems.map((subItem) => (
+                          <button
+                            key={subItem.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(subItem.path);
+                            }}
+                            className="text-sm text-green-600 hover:text-green-700 block"
+                          >
+                            {subItem.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-gray-400" />
