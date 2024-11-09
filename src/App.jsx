@@ -5,6 +5,7 @@ import AdminLayout from './layouts/AdminLayout';
 import AuthLayout from './layouts/AuthLayout';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import { useAuth } from './contexts/AuthContext';
+import Header from './components/Header'; // Nouveau import pour le Header
 
 // Import des composants du dashboard
 import DashboardPrincipal from './components/dashboard/DashboardPrincipal';
@@ -47,7 +48,7 @@ import GenerateurRapportsFiscaux from './components/reports/GenerateurRapportsFi
 import SimulateurScenariosInvestissements from './components/simulator/SimulateurScenariosInvestissements';
 
 function App() {
-  const { loading, isAdmin } = useAuth();
+  const { loading, isAdmin, isAuthenticated } = useAuth(); // Ajout de isAuthenticated
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -65,74 +66,87 @@ function App() {
   }
 
   return (
-    <Routes>
-      {/* Routes d'authentification */}
-      <Route element={<AuthLayout />}>
-        <Route path="/login" element={<SystemeAuthentificationComplet />} />
-        <Route path="/2fa" element={<DoubleAuthentification />} />
-      </Route>
+    <div className="flex flex-col min-h-screen">
+      <Header /> {/* Ajout du Header ici, avant les Routes */}
+      <div className="flex-grow">
+        <Routes>
+          {/* Routes d'authentification */}
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<SystemeAuthentificationComplet />} />
+            <Route path="/2fa" element={<DoubleAuthentification />} />
+          </Route>
 
-      {/* Routes d'administration */}
-      {isAdmin && (
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<ContentManagement />} />
-          <Route path="users" element={<ContentManagement section="users" />} />
-          <Route path="settings" element={<ContentManagement section="settings" />} />
-        </Route>
-      )}
+          {/* Routes d'administration */}
+          {isAdmin && (
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<ContentManagement />} />
+              <Route path="users" element={<ContentManagement section="users" />} />
+              <Route path="settings" element={<ContentManagement section="settings" />} />
+            </Route>
+          )}
 
-      {/* Routes principales */}
-      <Route path="/" element={<MainLayout />}>
-        {/* Dashboard */}
-        <Route index element={<DashboardPrincipal />} />
-        <Route path="dashboard">
-          <Route path="add-investment" element={<FormulaireAjoutInvestissement />} />
-          <Route path="performance" element={<PerformanceGlobaleDetaillee />} />
-          <Route path="investment/:id" element={<VueDetailleeInvestissement />} />
-        </Route>
+          {/* Routes principales */}
+          <Route path="/" element={<MainLayout />}>
+            {/* Dashboard */}
+            <Route index element={<DashboardPrincipal />} />
+            <Route path="dashboard">
+              <Route path="add-investment" element={<FormulaireAjoutInvestissement />} />
+              <Route path="performance" element={<PerformanceGlobaleDetaillee />} />
+              <Route path="investment/:id" element={<VueDetailleeInvestissement />} />
+            </Route>
 
-        {/* Connexions */}
-        <Route path="connections">
-          <Route path="banks" element={<ConnexionBanques />} />
-          <Route path="trading-accounts" element={<ConnexionComptesTitresPea />} />
-        </Route>
+            {/* Connexions */}
+            <Route path="connections">
+              <Route path="banks" element={<ConnexionBanques />} />
+              <Route path="trading-accounts" element={<ConnexionComptesTitresPea />} />
+            </Route>
 
-        {/* Premium */}
-        <Route path="premium">
-          <Route index element={<PageDeTarification />} />
-          <Route path="manage" element={<GestionForfaitsPremium />} />
-          <Route path="payment" element={<PaymentForm />} />
-        </Route>
+            {/* Premium */}
+            <Route path="premium">
+              <Route index element={<PageDeTarification />} />
+              <Route path="manage" element={<GestionForfaitsPremium />} />
+              <Route path="payment" element={<PaymentForm />} />
+            </Route>
 
-        {/* Compte utilisateur */}
-        <Route path="account">
-          <Route index element={<MonCompte />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="informations" element={<PersonalInfoPage />} />
-          <Route path="security" element={<Security />} />
-          <Route path="preferences" element={<Preferences />} />
-          <Route path="subscription" element={<GestionForfaitsPremium />} />
-        </Route>
+            {/* Compte utilisateur */}
+            <Route path="account">
+              <Route index element={<MonCompte />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="informations" element={<PersonalInfoPage />} />
+              <Route path="security" element={<Security />} />
+              <Route path="preferences" element={<Preferences />} />
+              <Route path="subscription" element={<GestionForfaitsPremium />} />
+            </Route>
 
-        {/* Autres fonctionnalités */}
-        <Route path="guide" element={<GuideDemarrageRapide />} />
-        <Route path="news" element={<ActualitesAnalyses />} />
-        <Route path="notifications" element={<CentreDeNotificationsEtSuggestions />} />
-        <Route path="reports">
-          <Route index element={<GenerateurRapportsFiscaux />} />
-          <Route path=":year" element={<GenerateurRapportsFiscaux />} />
-        </Route>
-        <Route path="simulator" element={<SimulateurScenariosInvestissements />} />
+            {/* Actualités */}
+            <Route path="news" element={<ActualitesAnalyses />} />
 
-        {/* Pages légales et informatives */}
-        <Route path="privacy-policy" element={<PolitiqueConfidentialite />} />
-        <Route path="data-security" element={<SecurisationDonneesFinancieres />} />
-        <Route path="legal-notices" element={<MentionsLegales />} />
+            {/* Routes protégées (accessibles uniquement si authentifié) */}
+            {isAuthenticated && (
+              <>
+                <Route path="reports">
+                  <Route index element={<GenerateurRapportsFiscaux />} />
+                  <Route path=":year" element={<GenerateurRapportsFiscaux />} />
+                </Route>
+                <Route path="notifications" element={<CentreDeNotificationsEtSuggestions />} />
+                <Route path="simulator" element={<SimulateurScenariosInvestissements />} />
+              </>
+            )}
 
-        {/* Page 404 */}
-        <Route path="*" element={<PageNotFound />} />
-      </Route>
-    </Routes>
+            {/* Autres fonctionnalités */}
+            <Route path="guide" element={<GuideDemarrageRapide />} />
+
+            {/* Pages légales et informatives */}
+            <Route path="privacy-policy" element={<PolitiqueConfidentialite />} />
+            <Route path="data-security" element={<SecurisationDonneesFinancieres />} />
+            <Route path="legal-notices" element={<MentionsLegales />} />
+
+            {/* Page 404 */}
+            <Route path="*" element={<PageNotFound />} />
+          </Route>
+        </Routes>
+      </div>
+    </div>
   );
 }
 
