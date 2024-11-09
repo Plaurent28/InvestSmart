@@ -75,7 +75,7 @@ const MonCompte = () => {
       label: 'Documents',
       icon: FileText,
       path: '/account/documents',
-      description: 'Accédez à vos documents et rapports'
+      description: 'Accédez à vos documents'
     },
     {
       id: 'settings',
