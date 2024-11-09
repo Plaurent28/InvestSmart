@@ -25,9 +25,6 @@ const Header = () => {
               <a href="#" className="text-gray-600 hover:text-gray-900">Banques</a>
               <a href="#" className="text-gray-600 hover:text-gray-900">Actualité</a>
               <a href="#" className="text-gray-600 hover:text-gray-900">Premium</a>
-              {isAuthenticated && (
-                <a href="#" className="text-gray-600 hover:text-gray-900">Rapports</a>
-              )}
             </nav>
           </div>
 
