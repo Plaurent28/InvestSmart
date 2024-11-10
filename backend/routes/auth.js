@@ -2,34 +2,39 @@
 
 const express = require('express');
 const router = express.Router();
+const { body } = require('express-validator');
+const authMiddleware = require('../middleware/auth');
+const { validateRequest } = require('../middleware/validator');
+const apiLimiter = require('../middleware/rateLimiter');
 const authController = require('../controllers/authController');
-const auth = require('../middleware/auth');
 
-// Routes publiques
-router.post('/register', authController.register);
-router.post('/login', authController.login);
+// Route pour l'inscription
+router.post(
+  '/register',
+  [
+    body('email').isEmail().withMessage('Email invalide').normalizeEmail(),
+    body('password').isLength({ min: 8 }).withMessage('Mot de passe de 8 caractères minimum'),
+    validateRequest,
+    apiLimiter
+  ],
+  authController.registerUser // Assurez-vous que cette fonction existe dans authController
+);
 
-// Routes protégées (nécessitent une authentification)
-router.use(auth); // Middleware d'authentification pour toutes les routes suivantes
+// Route pour la connexion
+router.post(
+  '/login',
+  [
+    body('email').isEmail().withMessage('Email invalide'),
+    body('password').exists().withMessage('Mot de passe requis'),
+    validateRequest,
+    apiLimiter
+  ],
+  authController.loginUser // Assurez-vous que cette fonction existe dans authController
+);
 
-// Vérification du token et récupération des informations utilisateur
-router.get('/verify', authController.verifyToken);
+// Route pour le logout
+router.post('/logout', authMiddleware, authController.logoutUser); // Assurez-vous que cette fonction existe dans authController
 
-// Déconnexion
-router.post('/logout', authController.logout);
+// Ajoutez les autres routes ici si nécessaire, comme pour le 2FA, etc.
 
-// Changement de mot de passe
-router.post('/change-password', authController.changePassword);
-
-// Route pour mettre à jour le profil utilisateur (si vous l'ajoutez plus tard)
-// router.put('/update-profile', authController.updateProfile);
-
-// Route pour la suppression du compte (si vous l'ajoutez plus tard)
-// router.delete('/delete-account', authController.deleteAccount);
-
-// Gestion du mot de passe oublié (si vous l'ajoutez plus tard)
-// router.post('/forgot-password', authController.forgotPassword);
-// router.post('/reset-password/:token', authController.resetPassword);
-
-// Export du router
 module.exports = router;

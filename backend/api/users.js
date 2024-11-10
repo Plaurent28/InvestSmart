@@ -3,7 +3,7 @@ const router = express.Router();
 const { body, param } = require('express-validator');
 const authMiddleware = require('../middleware/auth');
 const { validateRequest } = require('../middleware/validator');
-const { User, UserPreferences } = require('../models');
+const { User, UserPreferences } = require('../models/User');
 const rateLimiter = require('../middleware/rateLimiter');
 
 /**

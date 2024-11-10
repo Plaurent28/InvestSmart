@@ -10,6 +10,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 // Import des composants utilisés dans les routes
 import SystemeAuthentificationComplet from './components/auth/SystemeAuthentificationComplet';
 import DoubleAuthentification from './components/auth/DoubleAuthentification';
+import Register from './components/auth/Register';
 import DashboardPrincipal from './components/dashboard/DashboardPrincipal';
 import GuideDemarrageRapide from './components/guide/GuideDemarrageRapide';
 import PolitiqueConfidentialite from './components/Pages/PolitiqueConfidentialite';

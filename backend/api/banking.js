@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/auth');
-const { BankConnection, Transaction } = require('../models');
+const BankConnection = require('../models/BankConnection');
+const Transaction = require('../models/Transaction');
 const { plaidClient } = require('../config/plaid');
+
+// Ajoutez ici les routes et la logique de gestion bancaire
+
+module.exports = router;
 
 router.use(authMiddleware);
 

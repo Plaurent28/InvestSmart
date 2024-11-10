@@ -5,7 +5,7 @@ const authMiddleware = require('../middleware/auth');
 const { validateRequest } = require('../middleware/validator');
 const apiLimiter = require('../middleware/rateLimiter');
 const { generateTOTP, verifyTOTP } = require('../utils/2fa');
-const { User } = require('../models');
+const User = require('../models/User'); // Correction de l'import du modèle
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -22,33 +22,36 @@ const jwt = require('jsonwebtoken');
  *         description: Mot de passe
  *         required: true
  */
-router.post('/register',
+router.post(
+  '/register',
   [
     body('email').isEmail().normalizeEmail(),
     body('password').isLength({ min: 8 }),
     validateRequest,
-    apiLimiter
+    apiLimiter,
   ],
   async (req, res) => {
     try {
       const { email, password } = req.body;
       const existingUser = await User.findOne({ email });
-      
+
       if (existingUser) {
-        return res.status(400).json(JSON.stringify({ error: 'Email déjà utilisé' }));
+        return res.status(400).json({ error: 'Email déjà utilisé' });
       }
-      
+
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await User.create({
         email,
-        password: hashedPassword
+        password: hashedPassword,
       });
-      
-      res.status(201).json(JSON.stringify({ message: 'Inscription réussie' }));
+
+      res.status(201).json({ message: 'Inscription réussie' });
     } catch (error) {
-      res.status(500).json(JSON.stringify({ error: 'Erreur lors de l\'inscription' }));
+      console.error(error);
+      res.status(500).json({ error: 'Erreur lors de l\'inscription' });
     }
-});
+  }
+);
 
 /**
  * @swagger
@@ -56,38 +59,39 @@ router.post('/register',
  *   post:
  *     description: Connexion utilisateur
  */
-router.post('/login',
+router.post(
+  '/login',
   [
     body('email').isEmail(),
     body('password').exists(),
     validateRequest,
-    apiLimiter
+    apiLimiter,
   ],
   async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { email, password, totpToken } = req.body;
       const user = await User.findOne({ email });
-      
-      if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(401).json(JSON.stringify({ error: 'Identifiants invalides' }));
-      }
-      
-      if (user.is2FAEnabled && !req.body.totpToken) {
-        return res.status(403).json(JSON.stringify({ message: 'Code 2FA requis' }));
-      }
-      
-      const token = jwt.sign(
-        { userId: user._id },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h' }
-      );
-      
-      res.json(JSON.stringify({ token }));
-    } catch (error) {
-      res.status(500).json(JSON.stringify({ error: 'Erreur de connexion' }));
-    }
-});
 
-// ... autres routes auth (2FA, logout, reset password)
+      if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.status(401).json({ error: 'Identifiants invalides' });
+      }
+
+      if (user.is2FAEnabled) {
+        if (!totpToken || !verifyTOTP(totpToken, user.twoFactorSecret)) {
+          return res.status(403).json({ message: 'Code 2FA invalide ou manquant' });
+        }
+      }
+
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+        expiresIn: '24h',
+      });
+
+      res.json({ token });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur de connexion' });
+    }
+  }
+);
 
 module.exports = router;

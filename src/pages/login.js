@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
+import Link from 'next/link'; // Import du composant Link
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -88,6 +89,11 @@ const Login = () => {
             </button>
           </div>
         </form>
+
+        {/* Lien vers la page d'inscription */}
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Ou <Link href="/register"><a className="font-medium text-green-600 hover:text-green-500">créez un compte gratuitement</a></Link>
+        </p>
       </div>
     </div>
   );

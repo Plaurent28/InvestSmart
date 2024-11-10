@@ -10,7 +10,7 @@ const userRoutes = require('./users');
 const portfolioRoutes = require('./portfolios');
 const investmentRoutes = require('./investments');
 const bankingRoutes = require('./banking');
-const paymentRoutes = require('./payment');
+const paymentRoutes = require('./payments');
 const webhookRoutes = require('./webhook');
 
 // Middleware de sécurité

@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto'); // Assurez-vous que crypto est bien importé
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -63,20 +64,21 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
   lastLogin: {
     type: Date
+  },
+  twoFactorSecret: { // Ajout du champ pour stocker le secret 2FA
+    type: String,
+    select: false // Masque le champ lors des requêtes par défaut
   }
 }, {
-  timestamps: true // Ajoute automatiquement createdAt et updatedAt
+  timestamps: true
 });
 
 // Middleware pre-save pour hasher le mot de passe
 userSchema.pre('save', async function(next) {
-  // Ne hash le mot de passe que s'il a été modifié
   if (!this.isModified('password')) return next();
 
   try {
-    // Générer un salt
     const salt = await bcrypt.genSalt(10);
-    // Hash le mot de passe avec le salt
     this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (error) {

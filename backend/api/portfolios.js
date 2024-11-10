@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/auth');
 const { validateRequest } = require('../middleware/validator');
-const { Portfolio, Investment } = require('../models');
+const { Portfolio, Investment } = require('../models/Portfolio');
 
 router.use(authMiddleware);
 
