@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ function Register() {
       });
       if (response.ok) {
         alert('Compte créé avec succès !');
-        router.push('/login'); // Redirection vers la page de connexion
+        navigate('/login'); // Redirection vers la page de connexion
       } else {
         const data = await response.json();
         setError(data.message || 'Erreur lors de la création du compte.');

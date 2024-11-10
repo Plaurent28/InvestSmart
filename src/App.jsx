@@ -45,13 +45,8 @@ function App() {
       setIsMobile(window.innerWidth <= 768);
     };
     
-    // Vérification initiale
     handleResize();
-    
-    // Ajout de l'écouteur d'événement
     window.addEventListener('resize', handleResize);
-    
-    // Nettoyage
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -68,6 +63,10 @@ function App() {
             <Route 
               path="/login" 
               element={<SystemeAuthentificationComplet isMobile={isMobile} />} 
+            />
+            <Route 
+              path="/register" 
+              element={<Register isMobile={isMobile} />} 
             />
             <Route 
               path="/2fa" 
