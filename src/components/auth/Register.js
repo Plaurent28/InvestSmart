@@ -1,111 +1,203 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
 
-function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+const Register = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [generalError, setGeneralError] = useState('');
 
-  const handleRegister = async (e) => {
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Validation email
+    if (!formData.email) {
+      newErrors.email = 'L\'email est requis';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Format d\'email invalide';
+    }
+    
+    // Validation mot de passe
+    if (!formData.password) {
+      newErrors.password = 'Le mot de passe est requis';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères';
+    }
+    
+    // Validation confirmation mot de passe
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
+    setGeneralError('');
+    
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
+    
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      if (response.ok) {
-        alert('Compte créé avec succès !');
-        navigate('/login'); // Redirection vers la page de connexion
-      } else {
-        const data = await response.json();
-        setError(data.message || 'Erreur lors de la création du compte.');
-      }
+      // Simuler un appel API (à remplacer par votre véritable logique d'inscription)
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Si succès
+      console.log('Inscription réussie:', formData);
+      
     } catch (error) {
-      console.error('Erreur:', error);
-      setError('Une erreur est survenue. Veuillez réessayer.');
+      setGeneralError('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const handleGoogleLogin = () => {
-    window.location.href = '/api/auth/google';
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Effacer l'erreur du champ modifié
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Créer un compte
-        </h2>
-        <form onSubmit={handleRegister} className="mt-8 space-y-6">
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email-address" className="sr-only">
-                Adresse e-mail
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Mot de passe
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mot de passe"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-              />
-            </div>
-          </div>
-
-          {error && (
-            <div className="text-red-600 text-sm text-center">
-              {error}
-            </div>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold text-center">
+            Créer un compte
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {generalError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{generalError}</AlertDescription>
+            </Alert>
           )}
+          
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
+            <div className="space-y-2">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`block w-full pl-10 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none
+                    ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                  placeholder="Adresse email"
+                />
+              </div>
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email}</p>
+              )}
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
-              loading
-                ? 'bg-green-400 cursor-not-allowed'
-                : 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-            }`}
-          >
-            {loading ? 'Création en cours...' : 'Créer un compte'}
-          </button>
-        </form>
+            {/* Mot de passe */}
+            <div className="space-y-2">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`block w-full pl-10 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none
+                    ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                  placeholder="Mot de passe"
+                />
+              </div>
+              {errors.password && (
+                <p className="text-sm text-red-500">{errors.password}</p>
+              )}
+            </div>
 
-        {/* Connexion via Google */}
-        <div className="mt-6">
-          <button
-            onClick={handleGoogleLogin}
-            className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-          >
-            Continuer avec Google
-          </button>
-        </div>
-      </div>
+            {/* Confirmation mot de passe */}
+            <div className="space-y-2">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`block w-full pl-10 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none
+                    ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
+                  placeholder="Confirmer le mot de passe"
+                />
+              </div>
+              {errors.confirmPassword && (
+                <p className="text-sm text-red-500">{errors.confirmPassword}</p>
+              )}
+            </div>
+
+            {/* Bouton de soumission */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-colors
+                focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+                disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <span className="flex items-center justify-center">
+                  <Loader2 className="animate-spin -ml-1 mr-2 h-5 w-5" />
+                  Création en cours...
+                </span>
+              ) : (
+                'Créer un compte'
+              )}
+            </button>
+
+            {/* Séparateur */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">ou</span>
+              </div>
+            </div>
+
+            {/* Bouton Google */}
+            <button
+              type="button"
+              className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 py-2 rounded-md hover:bg-gray-50 transition-colors"
+            >
+              <img src="/api/placeholder/20/20" alt="Google logo" className="w-5 h-5" />
+              Continuer avec Google
+            </button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
-}
+};
 
 export default Register;
