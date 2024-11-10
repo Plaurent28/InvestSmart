@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
-import { useLoading } from '../../contexts/LoadingContext'; // Ajout de l'import du LoadingContext
+import { useLoading } from '../../../contexts/LoadingContext'; // Ajout de l'import du LoadingContext
 
 const Register = () => {
   const { showLoader, hideLoader, isLoading } = useLoading(); // Utilisation du LoadingContext
