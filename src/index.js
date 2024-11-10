@@ -7,10 +7,6 @@ import { LoadingProvider } from './contexts/LoadingContext';  // Nouveau (option
 import './index.css';
 import App from './App';
 
-// Optionnel : Configuration des services externes
-import { initializeServices } from './services/initialize';
-initializeServices();
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
