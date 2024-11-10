@@ -1,6 +1,9 @@
+// src/components/auth/Register.js
 import React, { useState } from 'react';
-import { Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
-import { useLoading } from '../../../contexts/LoadingContext'; // Ajout de l'import du LoadingContext
+import { useNavigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react'; // Ajout de l'import manquant
+import { useLoading } from '../../contexts/LoadingContext';
+import { validateForm } from './utils/validation';
 
 const Register = () => {
   const { showLoader, hideLoader, isLoading } = useLoading(); // Utilisation du LoadingContext
