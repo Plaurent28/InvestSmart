@@ -3,9 +3,9 @@ import { Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Menu, X, Bell } from 'lucide-react';
 
-const MainLayout = ({ isMobile }) => { // Ajout de la prop isMobile ici
+const MainLayout = ({ isMobile }) => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth(); // Suppression de loading car non utilisé
+  const { isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -25,7 +25,6 @@ const MainLayout = ({ isMobile }) => { // Ajout de la prop isMobile ici
       <header className="bg-white shadow">
         <div className={`mx-auto ${isMobile ? 'px-4' : 'max-w-7xl px-4 sm:px-6 lg:px-8'}`}>
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
             <div className="flex-shrink-0">
               <Link to="/" className={`font-bold text-gray-900 ${isMobile ? 'text-lg' : 'text-xl'}`}>
                 InvestSmart
@@ -52,7 +51,7 @@ const MainLayout = ({ isMobile }) => { // Ajout de la prop isMobile ici
             {/* Menu utilisateur - Desktop */}
             {!isMobile && (
               <div className="hidden md:flex items-center space-x-4">
-                {isAuthenticated && (
+                {isAuthenticated ? (
                   <>
                     <button 
                       className="text-gray-600 hover:text-gray-900"
@@ -67,8 +66,7 @@ const MainLayout = ({ isMobile }) => { // Ajout de la prop isMobile ici
                       Mon Compte
                     </button>
                   </>
-                )}
-                {!isAuthenticated && (
+                ) : (
                   <button
                     onClick={() => navigate('/login')}
                     className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
@@ -154,7 +152,15 @@ const MainLayout = ({ isMobile }) => { // Ajout de la prop isMobile ici
       {/* Pied de page */}
       <footer className="bg-white border-t">
         <div className={`mx-auto py-4 px-4 text-center text-gray-600 ${isMobile ? 'text-sm' : ''}`}>
-          © 2024 InvestSmart. Tous droits réservés.
+          <p>© 2024 InvestSmart. Tous droits réservés.</p>
+          <div className="flex justify-center space-x-4 mt-2">
+            <Link to="/privacy-policy" className="hover:underline">
+              Politique de confidentialité
+            </Link>
+            <Link to="/terms-of-service" className="hover:underline">
+              Conditions d'utilisation
+            </Link>
+          </div>
         </div>
       </footer>
     </div>
