@@ -1,8 +1,8 @@
 // src/components/auth/Register.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react'; // Ajout de l'import manquant
-import { useLoading } from '../../contexts/LoadingContext';
+import { Loader2 } from 'lucide-react';
+import { useLoading } from 'hooks/UseLoading';
 import { validateForm } from './utils/validation';
 
 const Register = () => {

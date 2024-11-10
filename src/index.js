@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ErrorBoundary } from './components/ErrorBoundary';  // Nouveau
-import { LoadingProvider } from './contexts/LoadingContext';  // Nouveau (optionnel)
+import { LoadingProvider } from './hooks/useLoading';  // Nouveau (optionnel)
 import './index.css';
 import App from './App';
 

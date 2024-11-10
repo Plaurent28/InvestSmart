@@ -29,7 +29,7 @@ import PerformanceGlobaleDetaillee from './components/dashboard/PerformanceGloba
 import VueDetailleeInvestissement from './components/dashboard/VueDetailleeInvestissement';
 import ConnexionBanques from './components/connections/ConnexionBanques';
 import ConnexionComptesTitresPea from './components/connections/ConnexionComptesTitresPea';
-import GenerateurRapportsFiscaux from './components/reports/GenerateurRapportsFiscaux';
+import GenerateurRapportsFiscaux from './components/features/reports/GenerateurRapportsFiscaux';
 import CentreDeNotificationsEtSuggestions from './components/notifications/CentreDeNotificationsEtSuggestions';
 import SimulateurScenariosInvestissements from './components/simulator/SimulateurScenariosInvestissements';
 import ActualitesAnalyses from './components/news/ActualitesAnalyses';

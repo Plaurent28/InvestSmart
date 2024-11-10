@@ -1,10 +1,10 @@
-// src/components/auth/Register.js
+// src/hooks/useLoading.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../../contexts/LoadingContext';
 import { validateForm } from './utils/validation';
 
-const Register = () => {
+const useLoading = () => {
   const navigate = useNavigate();
   const { showLoader, hideLoader } = useLoading();
   const [formData, setFormData] = useState({
@@ -125,4 +125,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default useLoading;
