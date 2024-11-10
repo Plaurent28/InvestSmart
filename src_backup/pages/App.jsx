@@ -15,7 +15,7 @@ import DashboardPrincipal from './components/dashboard/DashboardPrincipal';
 import GuideDemarrageRapide from './components/guide/GuideDemarrageRapide';
 import PolitiqueConfidentialite from './components/Pages/PolitiqueConfidentialite';
 import SecurisationDonneesFinancieres from './components/Pages/SecurisationDonneesFinancieres';
-import MentionsLegales from './pages/MentionsLegales';
+import MentionsLegales from './components/Pages/MentionsLegales';
 import PageDeTarification from './components/premium/PageDeTarification';
 import PaymentForm from './components/premium/PaymentForm';
 import MonCompte from './components/account/MonCompte';
