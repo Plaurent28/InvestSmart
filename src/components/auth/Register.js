@@ -35,6 +35,10 @@ function Register() {
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = '/api/auth/google';
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -89,6 +93,16 @@ function Register() {
             {loading ? 'Création en cours...' : 'Créer un compte'}
           </button>
         </form>
+
+        {/* Connexion via Google */}
+        <div className="mt-6">
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+          >
+            Continuer avec Google
+          </button>
+        </div>
       </div>
     </div>
   );

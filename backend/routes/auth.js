@@ -2,6 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const { body } = require('express-validator');
 const authMiddleware = require('../middleware/auth');
 const { validateRequest } = require('../middleware/validator');
@@ -17,7 +18,7 @@ router.post(
     validateRequest,
     apiLimiter
   ],
-  authController.registerUser // Assurez-vous que cette fonction existe dans authController
+  authController.registerUser
 );
 
 // Route pour la connexion
@@ -29,12 +30,20 @@ router.post(
     validateRequest,
     apiLimiter
   ],
-  authController.loginUser // Assurez-vous que cette fonction existe dans authController
+  authController.loginUser
 );
 
 // Route pour le logout
-router.post('/logout', authMiddleware, authController.logoutUser); // Assurez-vous que cette fonction existe dans authController
+router.post('/logout', authMiddleware, authController.logoutUser);
 
-// Ajoutez les autres routes ici si nécessaire, comme pour le 2FA, etc.
+// Route OAuth Google
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// Callback Google OAuth
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  authController.oauthSuccessRedirect
+);
 
 module.exports = router;

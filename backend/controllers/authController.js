@@ -35,6 +35,7 @@ exports.registerUser = async (req, res) => {
     await newUser.save();
     res.status(201).json({ message: 'Utilisateur créé avec succès' });
   } catch (error) {
+    console.error("Erreur lors de la création de l'utilisateur:", error);
     res.status(500).json({ message: "Erreur lors de la création de l'utilisateur" });
   }
 };
@@ -49,11 +50,13 @@ exports.loginUser = async (req, res) => {
   const { email, password, twoFactorCode } = req.body;
 
   try {
+    // Vérification de l'existence de l'utilisateur
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
+    // Validation du mot de passe
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Mot de passe incorrect' });
@@ -72,8 +75,9 @@ exports.loginUser = async (req, res) => {
 
     // Génération du jeton JWT
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    res.status(200).json({ token });
   } catch (error) {
+    console.error('Erreur lors de la connexion:', error);
     res.status(500).json({ message: 'Erreur lors de la connexion' });
   }
 };
@@ -81,9 +85,11 @@ exports.loginUser = async (req, res) => {
 // Fonction pour la déconnexion de l'utilisateur
 exports.logoutUser = async (req, res) => {
   try {
-    // Logique de déconnexion (par exemple, invalidation du token côté client)
+    // Ici, la déconnexion côté serveur peut ne pas être nécessaire si vous utilisez des tokens JWT.
+    // La déconnexion se fait généralement côté client en supprimant le token.
     res.status(200).json({ message: 'Déconnexion réussie' });
   } catch (error) {
+    console.error('Erreur lors de la déconnexion:', error);
     res.status(500).json({ message: 'Erreur lors de la déconnexion' });
   }
 };
