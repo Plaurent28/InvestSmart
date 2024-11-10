@@ -1,279 +1,199 @@
 import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { 
-  Lock,
-  Mail,
-  Eye,
-  EyeOff,
-  ArrowRight,
-  ChevronLeft,
-  AlertCircle,
-  Check,
-  Loader2
-} from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
-const SystemeAuthentificationComplet = () => {
-  const handleGoogleLogin = () => {
-    // Ici viendra la logique d'authentification Google
-    console.log('Connexion avec Google initiée');
-  };
-  const [currentView, setCurrentView] = useState('login'); // login, register, forgot-password
+const SystemeAuthentificationComplet = ({ isMobile }) => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
-  const [validations, setValidations] = useState({
-    lowercase: false,
-    uppercase: false,
-    number: false,
-    special: false,
-    length: false
-  });
-
-  // Validation du mot de passe en temps réel
-  const validatePassword = (password) => {
-    setValidations({
-      lowercase: /[a-z]/.test(password),
-      uppercase: /[A-Z]/.test(password),
-      number: /[0-9]/.test(password),
-      special: /[!@#$%^&*]/.test(password),
-      length: password.length >= 8
-    });
-  };
-
-  const handlePasswordChange = (e) => {
-    const password = e.target.value;
-    setFormData({ ...formData, password });
-    validatePassword(password);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    // Simulation d'une requête API
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
+    setError('');
+    setIsLoading(true);
+
+    // Validation basique
+    if (!email.includes('@') || password.length < 6) {
+      setError('Email ou mot de passe invalide');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const result = await login(email, password);
+      if (result.success) {
+        navigate('/');
+      } else {
+        setError(result.error || 'Identifiants incorrects');
+      }
+    } catch (error) {
+      setError('Une erreur est survenue. Veuillez réessayer.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#869D78' }}>
-      <Card className="w-full max-w-md bg-white/95 backdrop-blur-sm border-0">
-        {/* En-tête */}
-        <CardHeader className="space-y-1">
-          {currentView !== 'login' && (
-            <button
-              onClick={() => setCurrentView('login')}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-4"
-            >
-              <ChevronLeft size={20} />
-              Retour à la connexion
-            </button>
-          )}
-          <CardTitle className="text-2xl">
-            {currentView === 'login' && 'Connexion'}
-            {currentView === 'register' && 'Créer un compte'}
-            {currentView === 'forgot-password' && 'Réinitialisation du mot de passe'}
-          </CardTitle>
-          <p className="text-gray-600">
-            {currentView === 'login' && 'Accédez à votre espace personnel'}
-            {currentView === 'register' && 'Commencez à suivre vos investissements'}
-            {currentView === 'forgot-password' && 'Nous vous enverrons un lien de réinitialisation'}
+    <div className={`
+      min-h-screen bg-gray-100 flex items-center justify-center
+      ${isMobile ? 'px-4' : 'px-8'}
+    `}>
+      <div className={`
+        bg-white rounded-lg shadow-lg
+        ${isMobile ? 'w-full p-6' : 'max-w-md w-full p-8'}
+      `}>
+        <div className="text-center">
+          <h2 className={`
+            font-extrabold text-gray-900
+            ${isMobile ? 'text-2xl' : 'text-3xl'}
+          `}>
+            Connexion à votre compte
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Ou{' '}
+            <Link to="/register" className="text-green-600 hover:text-green-500 font-medium">
+              créez un compte gratuitement
+            </Link>
           </p>
-        </CardHeader>
+        </div>
 
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700" htmlFor="email">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          {error && (
+            <div className="rounded-md bg-red-50 p-4">
+              <div className="text-sm text-red-700">{error}</div>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            {/* Email Input */}
+            <div>
+              <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
                 Adresse email
               </label>
-              <div className="relative">
+              <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail size={20} className="text-gray-400" />
+                  <Mail className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
+                  id="email-address"
+                  name="email"
                   type="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#869D78] focus:border-transparent"
-                  placeholder="vous@exemple.com"
+                  autoComplete="email"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                  placeholder="vous@exemple.com"
                 />
               </div>
             </div>
 
-            {/* Mot de passe - Affiché pour login et register */}
-            {currentView !== 'forgot-password' && (
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700" htmlFor="password">
-                  Mot de passe
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock size={20} className="text-gray-400" />
-                  </div>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    id="password"
-                    value={formData.password}
-                    onChange={handlePasswordChange}
-                    className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#869D78] focus:border-transparent"
-                    placeholder="••••••••"
-                    required
-                  />
+            {/* Password Input */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Mot de passe
+              </label>
+              <div className="mt-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="appearance-none block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                  placeholder="Votre mot de passe"
+                />
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-gray-500 focus:outline-none"
                   >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
               </div>
-            )}
+            </div>
+          </div>
 
-            {/* Confirmation du mot de passe - Uniquement pour register */}
-            {currentView === 'register' && (
-              <>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700" htmlFor="confirmPassword">
-                    Confirmer le mot de passe
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock size={20} className="text-gray-400" />
-                    </div>
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      id="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#869D78] focus:border-transparent"
-                      placeholder="••••••••"
-                      required
-                    />
-                  </div>
-                </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                Se souvenir de moi
+              </label>
+            </div>
 
-                {/* Critères de validation du mot de passe */}
-                <div className="space-y-2 p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm font-medium text-gray-700">Le mot de passe doit contenir :</p>
-                  <div className="grid grid-cols-1 gap-2">
-                    {Object.entries({
-                      'Au moins 8 caractères': validations.length,
-                      'Une lettre minuscule': validations.lowercase,
-                      'Une lettre majuscule': validations.uppercase,
-                      'Un chiffre': validations.number,
-                      'Un caractère spécial': validations.special
-                    }).map(([text, isValid]) => (
-                      <div key={text} className="flex items-center gap-2">
-                        {isValid ? (
-                          <Check size={16} className="text-green-500" />
-                        ) : (
-                          <AlertCircle size={16} className="text-gray-400" />
-                        )}
-                        <span className={`text-sm ${isValid ? 'text-green-500' : 'text-gray-600'}`}>
-                          {text}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
+            <div className="text-sm">
+              <Link to="/forgot-password" className="font-medium text-green-600 hover:text-green-500">
+                Mot de passe oublié ?
+              </Link>
+            </div>
+          </div>
 
-            {/* Connexion avec Google */}
-            {currentView !== 'forgot-password' && (
-              <>
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">
-                      Ou continuer avec
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-center gap-3 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-offset-2 focus:ring-[#869D78]"
-                >
-                  <svg viewBox="0 0 48 48" className="w-5 h-5">
-                    <path
-                      fill="#FFC107"
-                      d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-                    />
-                    <path
-                      fill="#FF3D00"
-                      d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-                    />
-                    <path
-                      fill="#4CAF50"
-                      d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-                    />
-                    <path
-                      fill="#1976D2"
-                      d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-                    />
-                  </svg>
-                  {currentView === 'login' ? 'Se connecter avec Google' : 'S\'inscrire avec Google'}
-                </button>
-              </>
-            )}
-
-            {/* Bouton de soumission */}
+          <div>
             <button
               type="submit"
-              disabled={loading}
-              className="w-full bg-[#869D78] text-white py-2 px-4 rounded-lg hover:opacity-90 focus:ring-2 focus:ring-offset-2 focus:ring-[#869D78] disabled:opacity-50 flex items-center justify-center gap-2"
+              disabled={isLoading}
+              className={`
+                w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white
+                ${isLoading 
+                  ? 'bg-green-400 cursor-not-allowed' 
+                  : 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                }
+              `}
             >
-              {loading ? (
-                <Loader2 size={20} className="animate-spin" />
-              ) : (
-                <>
-                  {currentView === 'login' && 'Se connecter'}
-                  {currentView === 'register' && 'Créer mon compte'}
-                  {currentView === 'forgot-password' && 'Envoyer le lien'}
-                  <ArrowRight size={20} />
-                </>
-              )}
+              {isLoading ? 'Connexion en cours...' : 'Se connecter'}
             </button>
+          </div>
+        </form>
 
-            {/* Liens de navigation */}
-            <div className="space-y-2 text-center">
-              {currentView === 'login' && (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => setCurrentView('forgot-password')}
-                    className="text-sm text-gray-600 hover:text-gray-800"
-                  >
-                    Mot de passe oublié ?
-                  </button>
-                  <div className="text-sm">
-                    Pas encore de compte ?{' '}
-                    <button
-                      type="button"
-                      onClick={() => setCurrentView('register')}
-                      className="text-[#869D78] hover:underline font-medium"
-                    >
-                      Créer un compte
-                    </button>
-                  </div>
-                </>
-              )}
+        {/* Liens supplémentaires */}
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
             </div>
-          </form>
-        </CardContent>
-      </Card>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">Ou continuer avec</span>
+            </div>
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+            >
+              Google
+            </button>
+            <button
+              type="button"
+              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+            >
+              Apple
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

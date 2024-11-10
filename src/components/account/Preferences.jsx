@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
 
-const Preferences = () => {
-  // Code du composant Preferences fourni dans la deuxième partie
+const Preferences = ({ isMobile }) => {
+  return (
+    <div className={isMobile ? 'p-4' : 'p-8'}>
+      <h1 className="text-2xl font-bold mb-4">Préférences</h1>
+      <p>Contenu à venir...</p>
+    </div>
+  );
 };
 
 export default Preferences;
