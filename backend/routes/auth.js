@@ -7,7 +7,7 @@ const { body } = require('express-validator');
 const authMiddleware = require('../middleware/auth');
 const { validateRequest } = require('../middleware/validator');
 const apiLimiter = require('../middleware/rateLimiter');
-const authController = require('../controllers/authController');
+const authController = require('../controllers/authController'); // Vérifiez que cette importation est correcte
 
 // Route pour l'inscription
 router.post(
@@ -43,7 +43,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 router.get(
   '/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
-  authController.oauthSuccessRedirect
+  authController.oauthSuccessRedirect // Assurez-vous que cette fonction existe dans authController
 );
 
 module.exports = router;

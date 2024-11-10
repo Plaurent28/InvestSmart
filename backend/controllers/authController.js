@@ -16,13 +16,11 @@ exports.registerUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Vérification si l'utilisateur existe déjà
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "L'utilisateur existe déjà" });
     }
 
-    // Hachage du mot de passe et génération du secret 2FA
     const hashedPassword = await bcrypt.hash(password, 10);
     const twoFactorSecret = generateSecret().base32;
 
@@ -50,19 +48,16 @@ exports.loginUser = async (req, res) => {
   const { email, password, twoFactorCode } = req.body;
 
   try {
-    // Vérification de l'existence de l'utilisateur
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
-    // Validation du mot de passe
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Mot de passe incorrect' });
     }
 
-    // Vérification du code 2FA si activé
     if (user.twoFactorSecret) {
       if (!twoFactorCode) {
         return res.status(400).json({ message: 'Code 2FA requis' });
@@ -73,7 +68,6 @@ exports.loginUser = async (req, res) => {
       }
     }
 
-    // Génération du jeton JWT
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.status(200).json({ token });
   } catch (error) {
@@ -85,11 +79,18 @@ exports.loginUser = async (req, res) => {
 // Fonction pour la déconnexion de l'utilisateur
 exports.logoutUser = async (req, res) => {
   try {
-    // Ici, la déconnexion côté serveur peut ne pas être nécessaire si vous utilisez des tokens JWT.
-    // La déconnexion se fait généralement côté client en supprimant le token.
     res.status(200).json({ message: 'Déconnexion réussie' });
   } catch (error) {
     console.error('Erreur lors de la déconnexion:', error);
     res.status(500).json({ message: 'Erreur lors de la déconnexion' });
   }
+};
+
+// Fonction de redirection après la connexion OAuth réussie
+exports.oauthSuccessRedirect = (req, res) => {
+  // Générer un jeton JWT pour l'utilisateur authentifié
+  const token = jwt.sign({ userId: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+  // Rediriger vers le frontend avec le token JWT comme paramètre d'URL
+  res.redirect(`${process.env.FRONTEND_URL}/?token=${token}`);
 };
