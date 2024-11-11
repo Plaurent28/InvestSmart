@@ -1,6 +1,6 @@
+// src/components/layout/AdminLayout.jsx
 import React, { useState } from 'react';
 import { Navigate, Outlet, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import {
   Users,
   Settings,
@@ -11,13 +11,14 @@ import {
   LogOut,
   Home
 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';  // Modifié
+import { PageTransition } from '@/components/common';  // Ajouté
 
 const AdminLayout = () => {
   const { isAuthenticated, isAdmin, user, logout } = useAuth();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // Rediriger si non authentifié ou non admin
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }

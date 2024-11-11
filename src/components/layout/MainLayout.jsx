@@ -1,7 +1,9 @@
+// src/components/layout/MainLayout.jsx
 import React, { useState } from 'react';
 import { Outlet, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { Menu, X, Bell } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';  // Changé
+import { PageTransition } from '@/components/common';  // Ajouté
 
 const MainLayout = ({ isMobile }) => {
   const navigate = useNavigate();
@@ -145,7 +147,9 @@ const MainLayout = ({ isMobile }) => {
       {/* Contenu principal */}
       <main>
         <div className={`mx-auto ${isMobile ? 'px-4 py-4' : 'max-w-7xl py-6 sm:px-6 lg:px-8'}`}>
-          <Outlet />
+          <PageTransition>
+            <Outlet />
+          </PageTransition>
         </div>
       </main>
 

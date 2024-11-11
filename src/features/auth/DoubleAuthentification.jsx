@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Shield, ArrowLeft, RefreshCcw } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { LoadingSpinner } from '@/components/common';
+import { Card } from '@/components/ui';
 
 const DoubleAuthentification = ({ isMobile }) => {
   const navigate = useNavigate();

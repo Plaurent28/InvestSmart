@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { useLoading } from 'hooks/UseLoading';
 import { validateForm } from './utils/validation';
+import { useAuth } from '@/contexts/AuthContext';
+import { LoadingSpinner } from '@/components/common';
+import { Card } from '@/components/ui';
 
 const Register = () => {
   const { showLoader, hideLoader, isLoading } = useLoading(); // Utilisation du LoadingContext
