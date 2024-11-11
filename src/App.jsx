@@ -27,7 +27,7 @@ const PerformanceGlobaleDetaillee = lazy(() => import('./features/dashboard/Perf
 const VueDetailleeInvestissement = lazy(() => import('./features/dashboard/VueDetailleeInvestissement'));
 
 // Account
-const MonCompte = lazy(() => import('./features/account/MonCompte'));
+const AccountDashboard = lazy(() => import('./features/account/AccountDashboard'));
 const Profile = lazy(() => import('./features/account/Profile'));
 const PersonalInfoPage = lazy(() => import('./features/account/PersonalInfoPage'));
 const Security = lazy(() => import('./features/account/Security'));
