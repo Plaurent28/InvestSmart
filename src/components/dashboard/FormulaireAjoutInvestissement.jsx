@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Card, CardContent } from '../ui/card';
+import { Input } from '../ui/card';
+import { Button } from '../ui/card';
+import { Label } from '../ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/card';
+import { Alert, AlertDescription } from '../ui/card';
+import { Calendar } from '../ui/card';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/card';
 import { Calendar as CalendarIcon, Euro } from 'lucide-react';
 
 const FormulaireAjoutInvestissement = ({ isMobile }) => {
