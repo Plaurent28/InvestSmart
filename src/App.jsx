@@ -13,9 +13,9 @@ import DoubleAuthentification from './components/auth/DoubleAuthentification';
 import Register from './components/auth/Register';
 import DashboardPrincipal from './components/dashboard/DashboardPrincipal';
 import GuideDemarrageRapide from './components/guide/GuideDemarrageRapide';
-import PolitiqueConfidentialite from './components/Pages/PolitiqueConfidentialite';
-import SecurisationDonneesFinancieres from './components/Pages/SecurisationDonneesFinancieres';
-import MentionsLegales from './components/Pages/MentionsLegales';
+import PolitiqueConfidentialite from './components/pages/PolitiqueConfidentialite';
+import SecurisationDonneesFinancieres from './components/pages/SecurisationDonneesFinancieres';
+import MentionsLegales from './components/pages/MentionsLegales';
 import PageDeTarification from './components/premium/PageDeTarification';
 import PaymentForm from './components/premium/PaymentForm';
 import MonCompte from './components/account/MonCompte';
@@ -34,8 +34,7 @@ import CentreDeNotificationsEtSuggestions from './components/notifications/Centr
 import SimulateurScenariosInvestissements from './components/simulator/SimulateurScenariosInvestissements';
 import ActualitesAnalyses from './components/news/ActualitesAnalyses';
 import ContentManagement from './components/admin/ContentManagement';
-import PageNotFound from './components/Pages/PageNotFound';
-
+import PageNotFound from './components/pages/PageNotFound';
 function App() {
   const { loading, isAdmin } = useAuth();
   const [isMobile, setIsMobile] = useState(false);
