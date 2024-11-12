@@ -1,39 +1,96 @@
 #!/bin/bash
 
-# Couleurs pour les messages
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-echo -e "${GREEN}Début de la réorganisation des fichiers...${NC}\n"
-
-# Fonction pour déplacer les fichiers
-move_files() {
-  local source=$1
-  local dest=$2
-  if [ -d "$source" ] && [ -d "$dest" ]; then
-    mv $source/* $dest/ 2>/dev/null || true
-    echo "Déplacé les fichiers de $source vers $dest"
+# Fonction pour déplacer un fichier si le fichier existe
+move_if_exists() {
+  if [ -e "$1" ]; then
+    mv "$1" "$2"
+    echo "Déplacé $1 vers $2"
+  else
+    echo "Fichier $1 introuvable, saut de cette étape."
   fi
 }
 
-# Déplacer les composants vers features
-move_files "src/components/auth" "src/features/auth"
-move_files "src/components/dashboard" "src/features/dashboard"
-move_files "src/components/account" "src/features/account"
-move_files "src/components/premium" "src/features/premium"
-move_files "src/components/admin" "src/features/admin"
-move_files "src/components/connections" "src/features/connections"
-move_files "src/components/news" "src/features/news"
-move_files "src/components/notifications" "src/features/notifications"
-move_files "src/components/reports" "src/features/reports"
-move_files "src/components/simulator" "src/features/simulator"
+# Création des répertoires
+mkdir -p backend/api
+mkdir -p backend/config
+mkdir -p backend/controllers
+mkdir -p backend/middleware
+mkdir -p backend/models
+mkdir -p backend/routes
+mkdir -p backend/utils
+mkdir -p src/components
+mkdir -p src/pages
+mkdir -p src/services
+mkdir -p src/utils
+mkdir -p src/contexts
+mkdir -p src/layouts
+mkdir -p src/lib
+mkdir -p src/notifications
+mkdir -p src/premium
+mkdir -p src/reports
+mkdir -p src/simulator
+mkdir -p src/ui
 
-# Déplacer les pages
-move_files "src/components/Pages" "src/pages"
-move_files "src/pages/MentionsLegales.tsx" "src/pages/legal/"
+# Déplacement des fichiers backend
+move_if_exists api/auth.js backend/api/
+move_if_exists api/banking.js backend/api/
+move_if_exists api/index.js backend/api/
+move_if_exists api/investments.js backend/api/
+move_if_exists api/payments.js backend/api/
+move_if_exists api/portfolios.js backend/api/
+move_if_exists api/test.js backend/api/
+move_if_exists api/users.js backend/api/
+move_if_exists api/webhook.js backend/api/
 
-# Déplacer les layouts
-move_files "src/layouts" "src/components/layout"
+move_if_exists config/db.js backend/config/
+move_if_exists config/passport.js backend/config/
+move_if_exists config/plaid.js backend/config/
+move_if_exists config/stripe.js backend/config/
 
-echo -e "\n${GREEN}Réorganisation terminée!${NC}"
+move_if_exists controllers/authController.js backend/controllers/
+
+move_if_exists middleware/auth.js backend/middleware/
+move_if_exists middleware/rateLimiter.js backend/middleware/
+move_if_exists middleware/validator.js backend/middleware/
+
+move_if_exists models/BankConnection.js backend/models/
+move_if_exists models/Investment.js backend/models/
+move_if_exists models/InvestmentHistory.js backend/models/
+move_if_exists models/Payment.js backend/models/
+move_if_exists models/Portfolio.js backend/models/
+move_if_exists models/Subscription.js backend/models/
+move_if_exists models/Transaction.js backend/models/
+move_if_exists models/User.js backend/models/
+move_if_exists models/UserPreferences.js backend/models/
+
+move_if_exists routes/auth.js backend/routes/
+
+move_if_exists utils/2fa.js backend/utils/
+
+# Déplacement des fichiers src
+move_if_exists App.jsx src/
+move_if_exists App.test.js src/
+move_if_exists axios.config.js src/
+move_if_exists index.css src/
+move_if_exists index.js src/
+move_if_exists reportWebVitals.js src/
+move_if_exists setupTests.js src/
+
+# Déplacement des composants et utilitaires
+move_if_exists components/common src/components/
+move_if_exists contexts/AuthContext.jsx src/contexts/
+move_if_exists layouts/* src/layouts/
+move_if_exists lib/* src/lib/
+move_if_exists notifications/* src/notifications/
+move_if_exists premium/* src/premium/
+move_if_exists reports/* src/reports/
+move_if_exists simulator/* src/simulator/
+move_if_exists ui/* src/ui/
+
+# Déplacement des services et pages
+move_if_exists pages/* src/pages/
+move_if_exists services/* src/services/
+move_if_exists utils/* src/utils/
+
+# Suppression des répertoires vides
+rmdir api config controllers middleware models routes utils components common contexts layouts lib notifications premium reports simulator ui 2>/dev/null || true
