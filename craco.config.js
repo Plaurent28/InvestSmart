@@ -2,8 +2,10 @@ const path = require('path');
 
 module.exports = {
   webpack: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
     },
   },
-}
+};
