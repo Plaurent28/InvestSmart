@@ -53,6 +53,3 @@ export const AlertDescription = ({ className = '', children, ...props }) => (
     {children}
   </p>
 );
-
-// Export unique pour éviter tout doublon
-export { CardHeader, CardTitle, CardContent, CardFooter, Alert, AlertTitle, AlertDescription };
