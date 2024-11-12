@@ -70,7 +70,7 @@ function App() {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="container-full flex flex-col min-h-screen">
       <div className="flex-grow">
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
@@ -102,7 +102,7 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 {/* Compte utilisateur */}
                 <Route path="account">
-                  <Route index element={<MonCompte isMobile={isMobile} />} />
+                  <Route index element={<AccountDashboard isMobile={isMobile} />} />
                   <Route path="profile" element={<Profile isMobile={isMobile} />} />
                   <Route path="informations" element={<PersonalInfoPage isMobile={isMobile} />} />
                   <Route path="security" element={<Security isMobile={isMobile} />} />
