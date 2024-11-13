@@ -3,9 +3,9 @@ const path = require('path');
 
 const components = {
   'guide/GuideDemarrageRapide': 'Guide de démarrage rapide',
-  'Pages/PolitiqueConfidentialite': 'Politique de confidentialité',
-  'Pages/SecurisationDonneesFinancieres': 'Sécurisation des données financières',
-  'Pages/MentionsLegales': 'Mentions légales',
+  'pages/PolitiqueConfidentialite': 'Politique de confidentialité',
+  'pages/SecurisationDonneesFinancieres': 'Sécurisation des données financières',
+  'pages/MentionsLegales': 'Mentions légales',
   'premium/PageDeTarification': 'Page de tarification',
   'premium/PaymentForm': 'Formulaire de paiement',
   'account/MonCompte': 'Mon compte',
