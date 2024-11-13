@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Card, CardContent, Alert, AlertDescription } from '../ui/card';
-import { Calendar as CalendarIcon, Euro } from 'lucide-react';
+import { Label, Input, Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui';
+import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover';
+import { Calendar } from '../ui/calendar';
+import { Button } from '../ui/button';
 
 const FormulaireAjoutInvestissement = ({ isMobile }) => {
   const [date, setDate] = useState(new Date());
