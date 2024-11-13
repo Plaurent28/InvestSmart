@@ -2,17 +2,10 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import {
   PenSquare,
-  List,
   Eye,
-  Clock,
-  Save,
-  Upload,
-  Settings,
-  Filter,
   Plus,
   Check,
   X,
-  AlertTriangle,
   FileText,
   Image,
   Link,
@@ -22,7 +15,7 @@ import {
 
 const ContentManagement = () => {
   const [selectedTab, setSelectedTab] = useState('draft');
-  const [articles, setArticles] = useState([
+  const articles = [
     {
       id: 1,
       title: "Impact des taux directeurs sur les marchés européens",
@@ -41,7 +34,7 @@ const ContentManagement = () => {
       createdAt: "2024-03-15T11:45:00",
       isPremium: false,
     }
-  ]);
+  ];
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#869D78' }}>

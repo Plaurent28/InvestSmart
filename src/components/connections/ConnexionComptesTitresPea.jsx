@@ -2,19 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import {
   Building,
-  Plus,
   RefreshCcw,
-  Lock,
   CheckCircle2,
   AlertTriangle,
   X,
   ChevronRight,
-  Clock,
   Settings,
   Shield,
   Info,
-  Link2,
-  AlertCircle,
   TrendingUp
 } from 'lucide-react';
 
@@ -224,7 +219,6 @@ const ConnexionComptesTitresPea = () => {
 
                   <div className="flex items-center justify-between text-sm text-gray-500 pt-2">
                     <div className="flex items-center gap-1">
-                      <Clock size={16} />
                       Dernière synchro : {new Date(account.lastSync).toLocaleString('fr-FR')}
                     </div>
                     <div className="flex gap-2">

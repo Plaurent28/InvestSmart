@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import {
   Newspaper,
-  TrendingUp,
   Filter,
   Bookmark,
   Share2,
   Clock,
-  Tag,
   ChevronRight,
   Search,
   BarChart2,

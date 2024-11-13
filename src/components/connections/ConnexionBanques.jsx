@@ -1,21 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import {
-  Building,
-  Plus,
-  RefreshCcw,
-  Lock,
-  CheckCircle2,
-  AlertTriangle,
-  X,
-  ChevronRight,
-  Clock,
-  Settings,
-  Shield,
-  Info,
-  Link2,
-  AlertCircle
-} from 'lucide-react';
+import { Building, ChevronRight, Link2, AlertCircle, Shield } from 'lucide-react';
 
 const ConnexionBanques = () => {
   const [showDropdown, setShowDropdown] = useState(false);

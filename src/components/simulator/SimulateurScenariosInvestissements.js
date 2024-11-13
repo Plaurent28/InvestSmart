@@ -1,32 +1,20 @@
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import {
   Calculator,
-  ArrowRight,
   PlusCircle,
   Trash2,
   Save,
   RefreshCw,
   Download,
-  TrendingUp,
-  TrendingDown,
   ArrowUpRight,
   ArrowDownRight,
   Dices
 } from 'lucide-react';
 
-const COLORS = {
-  PEA: '#3498db',
-  'Compte-Titres': '#2ecc71',
-  Crypto: '#f1c40f',
-  Immobilier: '#e74c3c',
-  SCPI: '#9b59b6',
-  'Épargne': '#34495e'
-};
-
 const SimulateurScenariosInvestissements = () => {
-  const [scenarios, setScenarios] = useState([
+  const [scenarios] = useState([
     {
       id: 1,
       name: 'Scénario Optimiste',
@@ -81,7 +69,6 @@ const SimulateurScenariosInvestissements = () => {
     }
   ]);
 
-  // État actuel du portfolio (pour comparaison)
   const [currentPortfolio] = useState({
     totalValue: 170000,
     distribution: {
@@ -94,7 +81,6 @@ const SimulateurScenariosInvestissements = () => {
     }
   });
 
-  // Simuler les projections pour un scénario
   const generateProjections = (scenario) => {
     const months = scenario.hypotheses.duration * 12;
     const projections = [];

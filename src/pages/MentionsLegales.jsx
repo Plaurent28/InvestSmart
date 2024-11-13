@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building, Mail, Server, Shield, Users, Scale, Clock, Info } from 'lucide-react';
+import { Building, Mail, Server, Shield, Users, Scale, Info } from 'lucide-react';
 
 const MentionsLegales = () => {
   const sections = [

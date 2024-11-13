@@ -11,16 +11,13 @@ import {
   Bell,
   Settings,
   Shield,
-  Lock,
   ChevronRight,
   ChevronLeft,
-  X
 } from 'lucide-react';
 
 const GuideDemarrageRapide = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState(new Set());
-  const [showGuide, setShowGuide] = useState(true);
 
   const steps = [
     {
@@ -115,12 +112,6 @@ const GuideDemarrageRapide = () => {
                   <p className="font-bold">{Math.round((completedSteps.size / (steps.length * 3)) * 100)}% complété</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setShowGuide(false)}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Masquer le guide
-              </button>
             </div>
           </CardContent>
         </Card>

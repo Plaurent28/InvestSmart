@@ -8,14 +8,11 @@ import {
   Filter,
   Share2,
   FileCheck,
-  ArrowUpRight,
-  ArrowDownRight,
-  Settings,
   Crown
 } from 'lucide-react';
 
 const GenerateurRapportsFiscaux = () => {
-  const [selectedYear, setSelectedYear] = useState('2023');
+  const [selectedYear] = useState('2023');
   
   // Initialisation des valeurs à zéro
   const [reports, setReports] = useState({
@@ -35,7 +32,6 @@ const GenerateurRapportsFiscaux = () => {
   useEffect(() => {
     const fetchReportData = async () => {
       try {
-        // Remplacez cette ligne par l'URL de votre API
         const response = await fetch('/api/user/reports');
         const data = await response.json();
 
