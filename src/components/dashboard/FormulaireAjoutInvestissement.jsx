@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent } from '../ui/card';
-import { Alert, AlertDescription } from '../ui/card';
+import { Card, CardContent, Alert, AlertDescription } from '../ui/card';
 import { Calendar as CalendarIcon, Euro } from 'lucide-react';
 
 const FormulaireAjoutInvestissement = ({ isMobile }) => {
