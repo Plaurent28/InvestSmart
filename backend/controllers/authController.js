@@ -1,56 +1,101 @@
-// backend/config/passport.js
-
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const AppleStrategy = require('passport-apple').Strategy;
-const User = require('../models/User');
-
-// Configuration Google OAuth
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/api/auth/google/callback'
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await User.findOne({ googleId: profile.id });
-
-        if (!user) {
-          // Crée un nouvel utilisateur si aucun utilisateur n'est trouvé
-          user = new User({
-            email: profile.emails && profile.emails[0] ? profile.emails[0].value : '',
-            googleId: profile.id,
-            firstName: profile.name?.givenName || '',
-            lastName: profile.name?.familyName || ''
-          });
-          await user.save();
+// Liste des endpoints avec leurs méthodes HTTP et descriptions
+{
+  "users": {
+    "auth": {
+      "POST /api/auth/register": {
+        "description": "Inscription d'un nouvel utilisateur",
+        "body": {
+          "email": "string",
+          "password": "string",
+          "firstName": "string",
+          "lastName": "string"
         }
-
-        done(null, user);
-      } catch (error) {
-        console.error("Erreur Google OAuth:", error);
-        done(error, false);
+      },
+      "POST /api/auth/login": {
+        "description": "Connexion utilisateur",
+        "body": {
+          "email": "string",
+          "password": "string"
+        }
+      },
+      "POST /api/auth/2fa/setup": {
+        "description": "Configuration 2FA",
+        "requiresAuth": true
+      },
+      "POST /api/auth/2fa/verify": {
+        "description": "Vérification code 2FA"
+      }
+    },
+    "profile": {
+      "GET /api/users/me": {
+        "description": "Récupération profil utilisateur",
+        "requiresAuth": true
+      },
+      "PUT /api/users/me": {
+        "description": "Mise à jour profil",
+        "requiresAuth": true
+      },
+      "GET /api/users/preferences": {
+        "description": "Récupération préférences",
+        "requiresAuth": true
       }
     }
-  )
-);
+  },
 
-// Sérialisation de l'utilisateur dans la session
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
+  "portfolios": {
+    "GET /api/portfolios/summary": {
+      "description": "Résumé du portfolio",
+      "requiresAuth": true,
+      "response": {
+        "totalValue": "number",
+        "performance": {
+          "day": "number",
+          "week": "number",
+          "month": "number",
+          "year": "number"
+        },
+        "distribution": "array"
+      }
+    },
+    "GET /api/portfolios/assets/{type}": {
+      "description": "Détail par type d'actif",
+      "requiresAuth": true,
+      "params": {
+        "type": "enum (PEA, CTO, etc.)"
+      }
+    }
+  },
 
-// Désérialisation de l'utilisateur depuis la session
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (error) {
-    console.error("Erreur lors de la désérialisation de l'utilisateur:", error);
-    done(error, null);
-  }
-});
+  "investments": {
+    "POST /api/investments": {
+      "description": "Ajout investissement",
+      "requiresAuth": true,
+      "body": {
+        "type": "string",
+        "category": "string",
+        "name": "string",
+        "amount": "number",
+        "date": "date",
+        "notes": "string?"
+      }
+    },
+    "PUT /api/investments/{id}": {
+      "description": "Mise à jour investissement",
+      "requiresAuth": true
+    },
+    "DELETE /api/investments/{id}": {
+      "description": "Suppression investissement",
+      "requiresAuth": true
+    },
+    "GET /api/investments/history": {
+      "description": "Historique des transactions",
+      "requiresAuth": true,
+      "query": {
+        "startDate": "date?",
+        "endDate": "date?",
+        "type": "string?"
+      }
+    }
+  },
 
-module.exports = passport;
+  

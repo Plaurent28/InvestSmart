@@ -1,12 +1,22 @@
 const mongoose = require('mongoose');
-const PaymentSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    stripeSubscriptionId: String,
-    status: String,
-    createdAt: { type: Date, default: Date.now },
-    amount: Number,
-    currency: String,
-    interval: String, // "month" ou "year"
+
+const portfolioSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  type: { type: String, enum: ['PEA', 'CTO', 'Crypto', 'Immobilier', 'SCPI', 'Épargne'] },
+  name: String,
+  createdAt: { type: Date, default: Date.now },
+  lastUpdate: Date,
+  totalValue: Number,
+  performances: {
+    day: Number,
+    week: Number,
+    month: Number,
+    year: Number
+  },
+  settings: {
+    color: String,
+    visible: Boolean
+  }
 });
 
-module.exports = mongoose.model('Payment', PaymentSchema);
+module.exports = mongoose.model('Portfolio', portfolioSchema);

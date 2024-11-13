@@ -1,14 +1,4 @@
 {
   "presets": ["react-app"],
-  "plugins": [
-    [
-      "module-resolver",
-      {
-        "root": ["./src"],
-        "alias": {
-          "@": "./src"
-        }
-      }
-    ]
-  ]
+  "plugins": ["@babel/plugin-proposal-private-property-in-object"]
 }
